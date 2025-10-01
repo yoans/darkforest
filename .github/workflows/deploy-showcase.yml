@@ -1,0 +1,74 @@
+name: Deploy Dark Forest Network to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'apps/showcase-blog/**'
+      - '.github/workflows/deploy-showcase.yml'
+  workflow_dispatch:
+    inputs:
+      deploy_reason:
+        description: 'Reason for manual deployment'
+        required: false
+        default: 'Manual deployment'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'apps/showcase-blog/package-lock.json'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Install dependencies
+        working-directory: ./apps/showcase-blog
+        run: pnpm install
+        
+      - name: Build Next.js app
+        working-directory: ./apps/showcase-blog
+        run: |
+          pnpm build
+          touch out/.nojekyll
+        env:
+          NODE_ENV: production
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./apps/showcase-blog/out
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+        
+      - name: Update deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Deployment successful!"
+            echo "🌐 Site URL: ${{ steps.deployment.outputs.page_url }}"
+          else
+            echo "❌ Deployment failed!"
+          fi

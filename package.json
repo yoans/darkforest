@@ -1,0 +1,21 @@
+{
+  "name": "dark-forest-network",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "test": "turbo run test",
+    "setup": "pnpm install && pnpm run db:setup",
+    "db:setup": "cd packages/database && pnpm run db:push && pnpm run db:seed"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.16",
+    "@types/node": "^20.8.0",
+    "typescript": "^5.2.0",
+    "prettier": "^3.0.3",
+    "eslint": "^8.51.0"
+  },
+  "packageManager": "pnpm@8.10.0"
+}

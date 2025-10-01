@@ -1,0 +1,381 @@
+{
+  "name": "Daily Content Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "value": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Daily 6 AM Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "={{$env.ORCHESTRATOR_URL}}/api/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "type",
+              "value": "STRATEGY_PLANNING"
+            },
+            {
+              "name": "priority",
+              "value": "8"
+            },
+            {
+              "name": "data",
+              "value": "{\"timeframe\": \"daily\", \"sites\": \"all_active\"}"
+            }
+          ]
+        }
+      },
+      "id": "strategy-agent",
+      "name": "Trigger Strategy Planning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "orchestrator-auth",
+          "name": "Dark Forest API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "success-check",
+              "leftValue": "={{$json.success}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "strategy-success-check",
+      "name": "Strategy Success?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST", 
+        "url": "={{$env.ORCHESTRATOR_URL}}/api/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "type",
+              "value": "CONTENT_GENERATION"
+            },
+            {
+              "name": "data",
+              "value": "={{JSON.stringify($('Trigger Strategy Planning').first().json.data.strategy)}}"
+            },
+            {
+              "name": "priority",
+              "value": "7"
+            }
+          ]
+        }
+      },
+      "id": "content-agent",
+      "name": "Generate Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "orchestrator-auth",
+          "name": "Dark Forest API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{$json.requiresApproval}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ]
+        }
+      },
+      "id": "approval-check",
+      "name": "Needs Approval?", 
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "={{$env.ORCHESTRATOR_URL}}/api/approvals",
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "type",
+              "value": "POST_CONTENT"
+            },
+            {
+              "name": "data", 
+              "value": "={{JSON.stringify($json)}}"
+            },
+            {
+              "name": "priority",
+              "value": "high"
+            }
+          ]
+        }
+      },
+      "id": "create-approval",
+      "name": "Create Approval Request",
+      "type": "n8n-nodes-base.httpRequest", 
+      "typeVersion": 4.1,
+      "position": [1340, 120],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "orchestrator-auth",
+          "name": "Dark Forest API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 300,
+        "unit": "seconds"
+      },
+      "id": "wait-approval",
+      "name": "Wait for Approval",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1560, 120]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "={{$env.ORCHESTRATOR_URL}}/api/tasks",
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "type", 
+              "value": "PUBLISH_POST"
+            },
+            {
+              "name": "data",
+              "value": "={{JSON.stringify($json)}}"
+            }
+          ]
+        }
+      },
+      "id": "publish-agent",
+      "name": "Publish Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1340, 280],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "orchestrator-auth", 
+          "name": "Dark Forest API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "={{$env.ORCHESTRATOR_URL}}/api/tasks",
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "type",
+              "value": "GENERATE_SOCIAL_POSTS" 
+            },
+            {
+              "name": "data",
+              "value": "={{JSON.stringify({article: $json, platforms: ['twitter', 'linkedin']})}}"
+            }
+          ]
+        }
+      },
+      "id": "social-agent",
+      "name": "Generate Social Posts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1, 
+      "position": [1560, 280],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "orchestrator-auth",
+          "name": "Dark Forest API"  
+        }
+      }
+    },
+    {
+      "parameters": {
+        "message": "❌ Strategy planning failed",
+        "additionalFields": {
+          "priority": "high"
+        }
+      },
+      "id": "strategy-failure",
+      "name": "Alert Strategy Failure",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [900, 400],
+      "credentials": {
+        "slackApi": {
+          "id": "slack-alerts",
+          "name": "Slack Alerts"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 6 AM Trigger": {
+      "main": [
+        [
+          {
+            "node": "Trigger Strategy Planning", 
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Strategy Planning": {
+      "main": [
+        [
+          {
+            "node": "Strategy Success?",
+            "type": "main", 
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategy Success?": {
+      "main": [
+        [
+          {
+            "node": "Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alert Strategy Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Content": {
+      "main": [
+        [
+          {
+            "node": "Needs Approval?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Approval?": {
+      "main": [
+        [
+          {
+            "node": "Create Approval Request",
+            "type": "main", 
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Publish Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Wait for Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Approval": {
+      "main": [
+        [
+          {
+            "node": "Publish Content", 
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish Content": {
+      "main": [
+        [
+          {
+            "node": "Generate Social Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "daily-content-pipeline",
+  "tags": [
+    "dark-forest",
+    "content-automation",
+    "daily"
+  ]
+}

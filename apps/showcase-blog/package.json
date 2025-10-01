@@ -1,0 +1,33 @@
+{
+  "name": "@dark-forest/showcase-blog",
+  "version": "0.1.0", 
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build && next export",
+    "start": "next start",
+    "export": "next export",
+    "deploy": "npm run build && gh-pages -d out"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0", 
+    "react-dom": "^18.2.0",
+    "gray-matter": "^4.0.3",
+    "remark": "^14.0.2",
+    "remark-html": "^15.0.1",
+    "date-fns": "^2.30.0",
+    "lucide-react": "^0.292.0",
+    "clsx": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "typescript": "^5.2.0",
+    "tailwindcss": "^3.3.5",
+    "autoprefixer": "^10.4.16", 
+    "postcss": "^8.4.31",
+    "gh-pages": "^6.0.0"
+  }
+}

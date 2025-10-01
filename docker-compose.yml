@@ -1,0 +1,154 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: darkforest
+      POSTGRES_USER: darkforest
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-darkforest123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U darkforest"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Orchestrator Service
+  orchestrator:
+    build:
+      context: .
+      dockerfile: apps/orchestrator/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://darkforest:${DATABASE_PASSWORD:-darkforest123}@postgres:5432/darkforest
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/orchestrator:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  # Agents Service  
+  agents:
+    build:
+      context: .
+      dockerfile: apps/agents/Dockerfile
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://darkforest:${DATABASE_PASSWORD:-darkforest123}@postgres:5432/darkforest
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      orchestrator:
+        condition: service_started
+    volumes:
+      - ./apps/agents:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  # Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: apps/dashboard/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - ORCHESTRATOR_URL=http://orchestrator:3001
+      - DATABASE_URL=postgresql://darkforest:${DATABASE_PASSWORD:-darkforest123}@postgres:5432/darkforest
+    depends_on:
+      - orchestrator
+    volumes:
+      - ./apps/dashboard:/app
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+
+  # N8N Workflow Automation
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-admin}
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=darkforest
+      - DB_POSTGRESDB_USER=darkforest  
+      - DB_POSTGRESDB_PASSWORD=${DATABASE_PASSWORD:-darkforest123}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-n8n-encryption-key}
+      - WEBHOOK_URL=http://localhost:5678
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./integrations/n8n/workflows:/home/node/.n8n/workflows
+    restart: unless-stopped
+
+  # Strapi CMS (Optional)
+  strapi:
+    image: strapi/strapi:latest
+    ports:
+      - "1337:1337"
+    environment:
+      - DATABASE_CLIENT=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=darkforest
+      - DATABASE_USERNAME=darkforest
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-darkforest123}
+      - JWT_SECRET=${STRAPI_JWT_SECRET:-strapi-jwt-secret}
+      - ADMIN_JWT_SECRET=${STRAPI_ADMIN_JWT_SECRET:-strapi-admin-jwt-secret}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - strapi_data:/srv/app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  n8n_data:
+  strapi_data:
+
+networks:
+  default:
+    driver: bridge

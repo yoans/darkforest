@@ -1,0 +1,227 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Site {
+  id          String   @id @default(cuid())
+  name        String
+  domain      String   @unique
+  niche       String
+  status      SiteStatus @default(ACTIVE)
+  config      Json     // Site-specific configuration
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  posts       Post[]
+  analytics   SiteAnalytics[]
+  tasks       Task[]
+  approvals   Approval[]
+
+  @@map("sites")
+}
+
+model Post {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String
+  content     String
+  excerpt     String?
+  status      PostStatus  @default(DRAFT)
+  publishedAt DateTime?
+  seoScore    Int?
+  wordCount   Int?
+  keywords    String[]
+  metadata    Json?       // SEO metadata, featured image, etc.
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relationships
+  siteId      String
+  site        Site        @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  analytics   PostAnalytics[]
+  approvals   Approval[]
+
+  @@unique([siteId, slug])
+  @@map("posts")
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  type        TaskType
+  status      TaskStatus @default(PENDING)
+  priority    Int        @default(5)
+  data        Json       // Task-specific data
+  result      Json?      // Task result data
+  error       String?    // Error message if failed
+  retries     Int        @default(0)
+  maxRetries  Int        @default(3)
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relationships  
+  siteId      String?
+  site        Site?      @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  agentId     String?
+  agent       Agent?     @relation(fields: [agentId], references: [id])
+
+  @@map("tasks")
+}
+
+model Agent {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  type        AgentType
+  status      AgentStatus @default(ACTIVE)
+  version     String      @default("1.0.0")
+  config      Json?       // Agent-specific configuration
+  lastActive  DateTime?
+  totalTasks  Int         @default(0)
+  successRate Float       @default(0.0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relationships
+  tasks       Task[]
+
+  @@map("agents")
+}
+
+model Approval {
+  id          String         @id @default(cuid())
+  type        ApprovalType
+  status      ApprovalStatus @default(PENDING)
+  data        Json           // Content/data to be approved
+  reason      String?        // Reason for approval/rejection
+  reviewedBy  String?        // User who reviewed
+  reviewedAt  DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relationships
+  siteId      String?
+  site        Site?          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  postId      String?
+  post        Post?          @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("approvals")
+}
+
+model SiteAnalytics {
+  id            String   @id @default(cuid())
+  date          DateTime @default(now())
+  pageViews     Int      @default(0)
+  uniqueVisitors Int     @default(0)
+  bounceRate    Float    @default(0.0)
+  avgSessionTime Float   @default(0.0)
+  revenue       Float    @default(0.0)
+  conversions   Int      @default(0)
+  topKeywords   String[]
+  topPages      String[]
+  trafficSources Json?
+  createdAt     DateTime @default(now())
+
+  // Relationships
+  siteId        String
+  site          Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, date])
+  @@map("site_analytics")
+}
+
+model PostAnalytics {
+  id          String   @id @default(cuid())
+  date        DateTime @default(now())
+  views       Int      @default(0)
+  shares      Int      @default(0)
+  comments    Int      @default(0)
+  timeOnPage  Float    @default(0.0)
+  exitRate    Float    @default(0.0)
+  conversions Int      @default(0)
+  revenue     Float    @default(0.0)
+  keywords    String[]
+  createdAt   DateTime @default(now())
+
+  // Relationships
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, date])
+  @@map("post_analytics")
+}
+
+// Enums
+enum SiteStatus {
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum PostStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum TaskType {
+  STRATEGY_PLANNING
+  CONTENT_GENERATION
+  SEO_OPTIMIZATION
+  PUBLISHING
+  ANALYTICS_COLLECTION
+  MONETIZATION_OPTIMIZATION
+  MAINTENANCE
+  RESEARCH
+}
+
+enum TaskStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AgentType {
+  STRATEGY
+  CONTENT
+  SEO
+  PUBLISHING
+  ANALYTICS
+  MONETIZATION
+  MAINTENANCE
+  RESEARCH
+}
+
+enum AgentStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
+enum ApprovalType {
+  POST_CONTENT
+  STRATEGY_CHANGE
+  SITE_CONFIG
+  MONETIZATION_UPDATE
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
