@@ -1,0 +1,45 @@
+[
+  {
+    "title": "AI-Generated Business Insights",
+    "content": "Content generation in progress...",
+    "author": "Real AI Content Agent",
+    "publishDate": "2025-10-01T21:32:16.155Z",
+    "tags": [
+      "AI",
+      "Technology",
+      "Business"
+    ],
+    "success": true,
+    "filePath": "real-ai-blog\\ai-generated-business-insights.html",
+    "url": "/ai-generated-business-insights.html",
+    "fileName": "ai-generated-business-insights.html",
+    "id": 1759354336189,
+    "generatedAt": "2025-10-01T21:32:16.189Z",
+    "strategy": {
+      "success": true,
+      "data": {
+        "strategy": "Focus on AI and technology trends",
+        "keywords": [
+          "artificial intelligence",
+          "machine learning",
+          "automation"
+        ],
+        "topics": [
+          "AI in business",
+          "Future of work",
+          "Tech trends 2024"
+        ]
+      },
+      "message": "Strategy analysis complete"
+    },
+    "contentStats": {
+      "wordCount": 1000,
+      "readingTime": "5 minutes"
+    },
+    "agentResults": {
+      "strategyAgent": true,
+      "contentAgent": true,
+      "usedFallback": false
+    }
+  }
+]

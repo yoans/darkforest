@@ -3,9 +3,9 @@ import { z } from 'zod';
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.string().default('3001'),
-  DATABASE_URL: z.string(),
-  REDIS_URL: z.string(),
-  OPENAI_API_KEY: z.string(),
+  DATABASE_URL: z.string().optional(),
+  REDIS_URL: z.string().optional(),
+  OPENAI_API_KEY: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
   STRAPI_URL: z.string().optional(),
   WEBHOOK_SECRET: z.string().optional(),

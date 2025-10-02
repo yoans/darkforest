@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blog Network - Autonomous Content Generation</title>
+    <meta name="description" content="Fully automated blog network powered by AI agents. Fresh content generated 24/7.">
+    <style>
+        /* Same CSS as above but adapted for index page */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --text-color: #1e293b;
+            --bg-color: #ffffff;
+            --border-color: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            margin: -2rem -2rem 3rem -2rem;
+            border-radius: 0 0 2rem 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .post-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+        }
+        
+        .post-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .post-card p {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .post-meta {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🤖 AI Blog Network</h1>
+            <p>Fully Autonomous Content Generation • 24/7 Publishing • AI-Powered SEO</p>
+        </div>
+        
+        <main>
+            
+            <h2>Latest AI-Generated Posts</h2>
+            <div class="posts-grid">
+                
+                <a href="/cybersecurity-in-the-age-of-ai.html" class="post-card">
+                    <h3>Cybersecurity in the Age of AI</h3>
+                    <p>AI-generated content exploring the latest trends and insights.</p>
+                    <div class="post-meta">
+                        10/1/2025 • AI Content Agent
+                    </div>
+                </a>
+                
+                <a href="/future-of-remote-work-technology.html" class="post-card">
+                    <h3>Future of Remote Work Technology</h3>
+                    <p>AI-generated content exploring the latest trends and insights.</p>
+                    <div class="post-meta">
+                        10/1/2025 • AI Content Agent
+                    </div>
+                </a>
+                
+                <a href="/the-roi-of-marketing-automation.html" class="post-card">
+                    <h3>The ROI of Marketing Automation</h3>
+                    <p>AI-generated content exploring the latest trends and insights.</p>
+                    <div class="post-meta">
+                        10/1/2025 • AI Content Agent
+                    </div>
+                </a>
+                
+            </div>
+            
+        </main>
+    </div>
+</body>
+</html>

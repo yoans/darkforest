@@ -1,0 +1,371 @@
+{
+  "network": {
+    "name": "Dark Forest Blog Network",
+    "description": "AI-powered autonomous blog network generating high-quality content across multiple niches",
+    "owner": {
+      "name": "Dark Forest Media",
+      "email": "contact@darkforest.ai",
+      "website": "https://darkforest.ai"
+    },
+    "analytics": {
+      "googleAnalyticsId": "G-XXXXXXXXXX",
+      "enableHeatmaps": true,
+      "enableSessionRecording": false
+    },
+    "monetization": {
+      "googleAdsense": {
+        "enabled": true,
+        "publisherId": "ca-pub-XXXXXXXXXXXXXXXX",
+        "adSlots": {
+          "header": "XXXXXXXXXX",
+          "sidebar": "XXXXXXXXXX",
+          "inArticle": "XXXXXXXXXX",
+          "footer": "XXXXXXXXXX"
+        }
+      },
+      "amazonAssociates": {
+        "enabled": true,
+        "trackingId": "darkforest-20",
+        "apiKey": "",
+        "region": "US"
+      },
+      "affiliateLinks": {
+        "enabled": true,
+        "defaultDisclosure": "This post may contain affiliate links. We may earn a commission at no extra cost to you."
+      }
+    }
+  },
+  
+  "blogs": [
+    {
+      "id": "ai-business-insights",
+      "name": "AI Business Insights",
+      "tagline": "Transforming Business with Artificial Intelligence",
+      "domain": "aibusinessinsights.com",
+      "niche": "AI and Business Technology",
+      "targetAudience": {
+        "primary": "Business executives and entrepreneurs",
+        "secondary": "Tech professionals and investors",
+        "ageRange": "30-55",
+        "interests": ["business strategy", "AI adoption", "digital transformation", "ROI analysis"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 5,
+        "wordCountRange": [1200, 2500],
+        "tone": "professional, authoritative, data-driven",
+        "contentTypes": ["how-to guides", "case studies", "industry analysis", "tool reviews"],
+        "keyTopics": [
+          "AI implementation strategies",
+          "ROI calculations and metrics",
+          "Business automation",
+          "Competitive intelligence",
+          "Digital transformation"
+        ],
+        "seoKeywords": {
+          "primary": ["AI for business", "business automation", "AI ROI", "digital transformation"],
+          "secondary": ["machine learning business", "AI strategy", "enterprise AI", "AI tools"]
+        }
+      },
+      "theme": {
+        "template": "professional-corporate",
+        "colors": {
+          "primary": "#2563eb",
+          "secondary": "#64748b",
+          "accent": "#3b82f6",
+          "background": "#ffffff",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "Inter, -apple-system, sans-serif",
+          "body": "system-ui, -apple-system, sans-serif",
+          "code": "'Fira Code', 'Courier New', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "AI Business Insights",
+          "icon": "🤖"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "minimal",
+          "footerStyle": "detailed"
+        }
+      },
+      "monetization": {
+        "priority": "high",
+        "strategies": ["display-ads", "affiliate-marketing", "sponsored-content"],
+        "productCategories": ["AI software", "business tools", "online courses", "consulting services"]
+      },
+      "publishing": {
+        "schedule": "weekdays 9am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": false
+        }
+      }
+    },
+    
+    {
+      "id": "remote-work-revolution",
+      "name": "Remote Work Revolution",
+      "tagline": "The Future of Work is Here",
+      "domain": "remoteworkrev.com",
+      "niche": "Remote Work and Digital Nomad Lifestyle",
+      "targetAudience": {
+        "primary": "Remote workers and digital nomads",
+        "secondary": "HR professionals and company leaders",
+        "ageRange": "25-45",
+        "interests": ["remote work", "productivity", "work-life balance", "travel"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 4,
+        "wordCountRange": [1000, 2000],
+        "tone": "friendly, inspirational, practical",
+        "contentTypes": ["productivity tips", "tool reviews", "lifestyle guides", "success stories"],
+        "keyTopics": [
+          "Remote work best practices",
+          "Productivity tools and apps",
+          "Work-life balance strategies",
+          "Digital nomad destinations",
+          "Remote team collaboration"
+        ],
+        "seoKeywords": {
+          "primary": ["remote work", "work from home", "digital nomad", "remote jobs"],
+          "secondary": ["remote work tools", "productivity tips", "virtual teams", "telecommuting"]
+        }
+      },
+      "theme": {
+        "template": "lifestyle-modern",
+        "colors": {
+          "primary": "#10b981",
+          "secondary": "#6b7280",
+          "accent": "#34d399",
+          "background": "#f9fafb",
+          "text": "#111827"
+        },
+        "fonts": {
+          "heading": "'Poppins', sans-serif",
+          "body": "'Open Sans', sans-serif",
+          "code": "'Source Code Pro', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Remote Work Revolution",
+          "icon": "🌍"
+        },
+        "layout": {
+          "sidebar": false,
+          "headerStyle": "bold",
+          "footerStyle": "minimal"
+        }
+      },
+      "monetization": {
+        "priority": "medium",
+        "strategies": ["affiliate-marketing", "display-ads", "product-reviews"],
+        "productCategories": ["productivity tools", "travel gear", "online courses", "coworking spaces"]
+      },
+      "publishing": {
+        "schedule": "Mon, Wed, Thu, Sat 10am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": true,
+          "instagram": true
+        }
+      }
+    },
+    
+    {
+      "id": "cybersecurity-today",
+      "name": "Cybersecurity Today",
+      "tagline": "Protecting Your Digital Future",
+      "domain": "cybersecuritytoday.net",
+      "niche": "Cybersecurity and Data Privacy",
+      "targetAudience": {
+        "primary": "IT professionals and security practitioners",
+        "secondary": "Business owners and tech enthusiasts",
+        "ageRange": "28-50",
+        "interests": ["cybersecurity", "data privacy", "threat intelligence", "compliance"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 3,
+        "wordCountRange": [1500, 3000],
+        "tone": "technical, authoritative, educational",
+        "contentTypes": ["threat analysis", "security guides", "tool reviews", "compliance updates"],
+        "keyTopics": [
+          "Threat landscape analysis",
+          "Security best practices",
+          "Compliance and regulations",
+          "Security tools and platforms",
+          "Incident response strategies"
+        ],
+        "seoKeywords": {
+          "primary": ["cybersecurity", "data security", "network security", "threat protection"],
+          "secondary": ["security tools", "data privacy", "cyber threats", "security compliance"]
+        }
+      },
+      "theme": {
+        "template": "tech-dark",
+        "colors": {
+          "primary": "#ef4444",
+          "secondary": "#6b7280",
+          "accent": "#f87171",
+          "background": "#111827",
+          "text": "#f3f4f6"
+        },
+        "fonts": {
+          "heading": "'Roboto', sans-serif",
+          "body": "'IBM Plex Sans', sans-serif",
+          "code": "'JetBrains Mono', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Cybersecurity Today",
+          "icon": "🔒"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "tech",
+          "footerStyle": "detailed"
+        }
+      },
+      "monetization": {
+        "priority": "high",
+        "strategies": ["affiliate-marketing", "sponsored-content", "display-ads"],
+        "productCategories": ["security software", "VPN services", "training courses", "certifications"]
+      },
+      "publishing": {
+        "schedule": "Mon, Wed, Fri 8am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "reddit": true
+        }
+      }
+    },
+    
+    {
+      "id": "marketing-automation-hub",
+      "name": "Marketing Automation Hub",
+      "tagline": "Scale Your Marketing with Automation",
+      "domain": "marketingautohub.com",
+      "niche": "Marketing Automation and Growth",
+      "targetAudience": {
+        "primary": "Marketing professionals and growth hackers",
+        "secondary": "Small business owners and entrepreneurs",
+        "ageRange": "26-45",
+        "interests": ["marketing automation", "growth hacking", "conversion optimization", "analytics"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 4,
+        "wordCountRange": [1200, 2200],
+        "tone": "actionable, results-driven, enthusiastic",
+        "contentTypes": ["tutorials", "case studies", "tool comparisons", "strategy guides"],
+        "keyTopics": [
+          "Marketing automation platforms",
+          "Email marketing strategies",
+          "Conversion rate optimization",
+          "Growth hacking techniques",
+          "Analytics and reporting"
+        ],
+        "seoKeywords": {
+          "primary": ["marketing automation", "email marketing", "growth hacking", "conversion optimization"],
+          "secondary": ["marketing tools", "automation software", "marketing ROI", "lead generation"]
+        }
+      },
+      "theme": {
+        "template": "marketing-vibrant",
+        "colors": {
+          "primary": "#8b5cf6",
+          "secondary": "#64748b",
+          "accent": "#a78bfa",
+          "background": "#ffffff",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "'Montserrat', sans-serif",
+          "body": "'Lato', sans-serif",
+          "code": "'Inconsolata', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Marketing Automation Hub",
+          "icon": "📈"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "bold",
+          "footerStyle": "detailed"
+        }
+      },
+      "monetization": {
+        "priority": "very-high",
+        "strategies": ["affiliate-marketing", "sponsored-reviews", "display-ads", "email-courses"],
+        "productCategories": ["marketing software", "automation tools", "analytics platforms", "online courses"]
+      },
+      "publishing": {
+        "schedule": "Tue, Thu, Sat, Sun 11am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": true
+        }
+      }
+    }
+  ],
+  
+  "contentQuality": {
+    "minimumWordCount": 1000,
+    "requireSources": true,
+    "minimumSources": 2,
+    "requireStatistics": true,
+    "requireExamples": true,
+    "requireActionableAdvice": true,
+    "readabilityTarget": "grade-10",
+    "sentimentTarget": "positive-neutral",
+    "plagiarismCheck": true,
+    "factCheckingEnabled": true
+  },
+  
+  "aiSettings": {
+    "provider": "openai",
+    "model": "gpt-4",
+    "temperature": 0.7,
+    "maxTokens": 3000,
+    "topP": 0.9,
+    "frequencyPenalty": 0.3,
+    "presencePenalty": 0.3,
+    "systemPrompts": {
+      "strategy": "You are an expert content strategist specializing in SEO and audience engagement. Analyze trends, identify opportunities, and create data-driven content strategies.",
+      "content": "You are a professional content writer with expertise in creating engaging, well-researched articles. Write in a clear, authoritative style with proper structure, examples, and actionable insights.",
+      "seo": "You are an SEO expert focused on on-page optimization, keyword integration, and search intent. Optimize content for both users and search engines."
+    }
+  },
+  
+  "deployment": {
+    "platform": "github-pages",
+    "repository": "darkforest-blogs",
+    "branch": "main",
+    "customDomains": true,
+    "ssl": true,
+    "cdn": {
+      "enabled": true,
+      "provider": "cloudflare"
+    },
+    "cicd": {
+      "enabled": true,
+      "provider": "github-actions",
+      "autoDeployOnCommit": true,
+      "runTests": true
+    }
+  }
+}

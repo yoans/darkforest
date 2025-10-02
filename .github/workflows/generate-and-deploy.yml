@@ -1,0 +1,94 @@
+name: Generate and Deploy Blog Content
+
+on:
+  # Run on schedule (daily at 2 AM UTC)
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      post_count:
+        description: 'Number of posts to generate per blog'
+        required: false
+        default: '1'
+  
+  # Run on push to main branch
+  push:
+    branches:
+      - main
+    paths:
+      - 'config/**'
+      - 'generators/**'
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: 📚 Install dependencies
+        run: pnpm install
+      
+      - name: 🤖 Generate blog content
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          cd generators
+          node openai-content-pipeline.js batch ${{ github.event.inputs.post_count || '1' }}
+      
+      - name: 📊 Content statistics
+        run: |
+          echo "## 📈 Content Generation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Blogs**: $(find output -maxdepth 1 -type d | tail -n +2 | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Posts**: $(find output -name '*.html' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Size**: $(du -sh output | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Generated on: $(date)" >> $GITHUB_STEP_SUMMARY
+      
+      - name: 🚀 Deploy to GitHub Pages
+        run: |
+          bash scripts/deploy-to-github-pages.sh
+      
+      - name: 📤 Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          publish_branch: gh-pages
+          cname: ${{ secrets.CUSTOM_DOMAIN }}  # Optional: your custom domain
+      
+      - name: ✅ Deployment complete
+        run: |
+          echo "## 🎉 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Your blog network is now live!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **URL**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
+      
+      - name: 📧 Notify on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ Blog Generation Failed"
+          body: "The automated blog generation workflow failed. Check the logs."
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          from: "Blog Network Bot"
