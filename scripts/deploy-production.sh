@@ -53,9 +53,12 @@ else
     BLOG_CONFIG='{}'
 fi
 
-# Create main index page
-echo "📄 Creating network index..."
-cat > "$DEPLOY_DIR/index.html" << 'INDEXEOF'
+# Create main index page with real metrics
+echo "📄 Creating showcase index..."
+node scripts/generate-showcase-index.js
+
+# Old static index (keeping as fallback comment)
+: << 'INDEXEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>

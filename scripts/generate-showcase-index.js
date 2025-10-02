@@ -1,10 +1,121 @@
-<!DOCTYPE html>
+#!/usr/bin/env node
+
+/**
+ * Generate Showcase Index Page with Real Metrics
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const DEPLOY_DIR = path.join(__dirname, '..', 'deploy');
+
+// Get real metrics
+function getMetrics() {
+    const blogs = ['ai-business-insights', 'remote-work-revolution', 'cybersecurity-today', 'marketing-automation-hub'];
+    const blogData = [];
+    
+    let totalPosts = 0;
+    
+    blogs.forEach(blogSlug => {
+        const blogDir = path.join(DEPLOY_DIR, blogSlug);
+        if (!fs.existsSync(blogDir)) return;
+        
+        const files = fs.readdirSync(blogDir).filter(f => f.endsWith('.html'));
+        const posts = files.map(f => {
+            const slug = f.replace('.html', '');
+            const title = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            return { slug, title, filename: f };
+        });
+        
+        totalPosts += posts.length;
+        
+        // Get size
+        const stats = getDirectorySize(blogDir);
+        
+        blogData.push({
+            slug: blogSlug,
+            name: getBlogName(blogSlug),
+            icon: getBlogIcon(blogSlug),
+            description: getBlogDescription(blogSlug),
+            theme: getBlogTheme(blogSlug),
+            posts: posts,
+            postCount: posts.length,
+            size: formatBytes(stats)
+        });
+    });
+    
+    return { blogs: blogData, totalPosts };
+}
+
+function getDirectorySize(dir) {
+    let size = 0;
+    const files = fs.readdirSync(dir);
+    files.forEach(file => {
+        const filePath = path.join(dir, file);
+        const stats = fs.statSync(filePath);
+        if (stats.isFile()) {
+            size += stats.size;
+        }
+    });
+    return size;
+}
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function getBlogName(slug) {
+    const names = {
+        'ai-business-insights': 'AI Business Insights',
+        'remote-work-revolution': 'Remote Work Revolution',
+        'cybersecurity-today': 'Cybersecurity Today',
+        'marketing-automation-hub': 'Marketing Automation Hub'
+    };
+    return names[slug] || slug;
+}
+
+function getBlogIcon(slug) {
+    const icons = {
+        'ai-business-insights': '🤖',
+        'remote-work-revolution': '🌍',
+        'cybersecurity-today': '🔒',
+        'marketing-automation-hub': '📊'
+    };
+    return icons[slug] || '📝';
+}
+
+function getBlogDescription(slug) {
+    const descriptions = {
+        'ai-business-insights': 'Exploring AI implementation strategies, digital transformation, and business automation',
+        'remote-work-revolution': 'Work-life balance, productivity tips, and remote work best practices',
+        'cybersecurity-today': 'Security tools, threat analysis, and data protection strategies',
+        'marketing-automation-hub': 'Conversion optimization, marketing automation, and growth strategies'
+    };
+    return descriptions[slug] || 'High-quality automated content';
+}
+
+function getBlogTheme(slug) {
+    const themes = {
+        'ai-business-insights': 'Corporate Blue',
+        'remote-work-revolution': 'Lifestyle Modern',
+        'cybersecurity-today': 'Tech Dark',
+        'marketing-automation-hub': 'Marketing Vibrant'
+    };
+    return themes[slug] || 'Professional';
+}
+
+function generateHTML(data) {
+    const { blogs, totalPosts } = data;
+    
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-Powered Blog Network | Autonomous Content Generation</title>
-    <meta name="description" content="Explore our network of 4 AI-powered blogs with 6 high-quality articles">
+    <meta name="description" content="Explore our network of ${blogs.length} AI-powered blogs with ${totalPosts} high-quality articles">
     <meta property="og:title" content="AI-Powered Blog Network Showcase">
     <meta property="og:description" content="Autonomous multi-agent system generating professional content across multiple niches">
     <meta property="og:type" content="website">
@@ -317,11 +428,11 @@
             
             <div class="stats">
                 <div class="stat">
-                    <span class="stat-number">4</span>
+                    <span class="stat-number">${blogs.length}</span>
                     <span class="stat-label">Active Blogs</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">6</span>
+                    <span class="stat-number">${totalPosts}</span>
                     <span class="stat-label">Published Posts</span>
                 </div>
                 <div class="stat">
@@ -333,124 +444,34 @@
         
         <main>
             <div class="blog-grid">
-                <div class="blog-card">
-                    <span class="blog-icon">🤖</span>
-                    <h2 class="blog-name">AI Business Insights</h2>
-                    <p class="blog-description">Exploring AI implementation strategies, digital transformation, and business automation</p>
+${blogs.map(blog => `                <div class="blog-card">
+                    <span class="blog-icon">${blog.icon}</span>
+                    <h2 class="blog-name">${blog.name}</h2>
+                    <p class="blog-description">${blog.description}</p>
                     
                     <div class="blog-meta">
                         <div class="meta-item">
                             <span class="meta-label">Articles</span>
-                            <span class="meta-value">3</span>
+                            <span class="meta-value">${blog.postCount}</span>
                         </div>
                         <div class="meta-item">
                             <span class="meta-label">Size</span>
-                            <span class="meta-value">72.2 KB</span>
+                            <span class="meta-value">${blog.size}</span>
                         </div>
                         <div class="meta-item">
                             <span class="meta-label">Theme</span>
-                            <span class="meta-value">Corporate Blue</span>
+                            <span class="meta-value">${blog.theme}</span>
                         </div>
                     </div>
                     
                     <ul class="post-list">
-                        <li class="post-item">
-                            <a href="ai-business-insights/how-ai-is-revolutionizing-business-operations-in-2025.html" class="post-link">How Ai Is Revolutionizing Business Operations In 2025</a>
-                        </li>
-                        <li class="post-item">
-                            <a href="ai-business-insights/the-complete-guide-to-ai-implementation-strategies-in-2025.html" class="post-link">The Complete Guide To Ai Implementation Strategies In 2025</a>
-                        </li>
-                        <li class="post-item">
-                            <a href="ai-business-insights/the-complete-guide-to-digital-transformation-in-2025.html" class="post-link">The Complete Guide To Digital Transformation In 2025</a>
-                        </li>
+${blog.posts.map(post => `                        <li class="post-item">
+                            <a href="${blog.slug}/${post.filename}" class="post-link">${post.title}</a>
+                        </li>`).join('\n')}
                     </ul>
                     
-                    <a href="ai-business-insights/" class="blog-cta">Explore Blog →</a>
-                </div>
-                <div class="blog-card">
-                    <span class="blog-icon">🌍</span>
-                    <h2 class="blog-name">Remote Work Revolution</h2>
-                    <p class="blog-description">Work-life balance, productivity tips, and remote work best practices</p>
-                    
-                    <div class="blog-meta">
-                        <div class="meta-item">
-                            <span class="meta-label">Articles</span>
-                            <span class="meta-value">1</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Size</span>
-                            <span class="meta-value">22.9 KB</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Theme</span>
-                            <span class="meta-value">Lifestyle Modern</span>
-                        </div>
-                    </div>
-                    
-                    <ul class="post-list">
-                        <li class="post-item">
-                            <a href="remote-work-revolution/the-complete-guide-to-work-life-balance-strategies-in-2025.html" class="post-link">The Complete Guide To Work Life Balance Strategies In 2025</a>
-                        </li>
-                    </ul>
-                    
-                    <a href="remote-work-revolution/" class="blog-cta">Explore Blog →</a>
-                </div>
-                <div class="blog-card">
-                    <span class="blog-icon">🔒</span>
-                    <h2 class="blog-name">Cybersecurity Today</h2>
-                    <p class="blog-description">Security tools, threat analysis, and data protection strategies</p>
-                    
-                    <div class="blog-meta">
-                        <div class="meta-item">
-                            <span class="meta-label">Articles</span>
-                            <span class="meta-value">1</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Size</span>
-                            <span class="meta-value">24.2 KB</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Theme</span>
-                            <span class="meta-value">Tech Dark</span>
-                        </div>
-                    </div>
-                    
-                    <ul class="post-list">
-                        <li class="post-item">
-                            <a href="cybersecurity-today/the-complete-guide-to-security-tools-and-platforms-in-2025.html" class="post-link">The Complete Guide To Security Tools And Platforms In 2025</a>
-                        </li>
-                    </ul>
-                    
-                    <a href="cybersecurity-today/" class="blog-cta">Explore Blog →</a>
-                </div>
-                <div class="blog-card">
-                    <span class="blog-icon">📊</span>
-                    <h2 class="blog-name">Marketing Automation Hub</h2>
-                    <p class="blog-description">Conversion optimization, marketing automation, and growth strategies</p>
-                    
-                    <div class="blog-meta">
-                        <div class="meta-item">
-                            <span class="meta-label">Articles</span>
-                            <span class="meta-value">1</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Size</span>
-                            <span class="meta-value">24.3 KB</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Theme</span>
-                            <span class="meta-value">Marketing Vibrant</span>
-                        </div>
-                    </div>
-                    
-                    <ul class="post-list">
-                        <li class="post-item">
-                            <a href="marketing-automation-hub/the-complete-guide-to-conversion-rate-optimization-in-2025.html" class="post-link">The Complete Guide To Conversion Rate Optimization In 2025</a>
-                        </li>
-                    </ul>
-                    
-                    <a href="marketing-automation-hub/" class="blog-cta">Explore Blog →</a>
-                </div>
+                    <a href="${blog.slug}/" class="blog-cta">Explore Blog →</a>
+                </div>`).join('\n')}
             </div>
             
             <div class="tech-section">
@@ -505,7 +526,7 @@
         <footer>
             <p>
                 Built with ❤️ using AI • Deployed on <a href="https://pages.github.com/" target="_blank">GitHub Pages</a> • 
-                Generated on October 1, 2025
+                Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
             <p style="margin-top: 1rem; font-size: 0.9rem;">
                 🚀 Autonomous • 🎨 Professional • 📈 Scalable
@@ -513,4 +534,24 @@
         </footer>
     </div>
 </body>
-</html>
+</html>`;
+}
+
+// Main execution
+try {
+    console.log('📊 Gathering metrics...');
+    const data = getMetrics();
+    
+    console.log(`✅ Found ${data.blogs.length} blogs with ${data.totalPosts} total posts`);
+    
+    console.log('📝 Generating showcase HTML...');
+    const html = generateHTML(data);
+    
+    console.log('💾 Writing index.html...');
+    fs.writeFileSync(path.join(DEPLOY_DIR, 'index.html'), html);
+    
+    console.log('✅ Showcase index created successfully!');
+} catch (error) {
+    console.error('❌ Error:', error.message);
+    process.exit(1);
+}
