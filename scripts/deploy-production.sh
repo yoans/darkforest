@@ -25,6 +25,13 @@ echo "📦 Preparing deployment directory..."
 rm -rf "$DEPLOY_DIR"
 mkdir -p "$DEPLOY_DIR"
 
+# Copy Dark Forest logo
+echo "🎨 Copying Dark Forest logo..."
+if [ -f "darkforest.svg" ]; then
+    cp darkforest.svg "$DEPLOY_DIR/"
+    echo "  ✓ Logo copied"
+fi
+
 # Copy all generated blog content
 echo "📚 Copying blog content..."
 blog_count=0
@@ -297,8 +304,13 @@ node scripts/generate-showcase-index.js
 <body>
     <div class="container">
         <header>
-            <h1>🤖 AI-Powered Blog Network</h1>
-            <p class="tagline">Automated Content Generation at Scale</p>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <img src="darkforest.svg" alt="Dark Forest" style="width: 80px; height: 80px; filter: drop-shadow(0 0 20px rgba(0,255,200,0.3));">
+                <div>
+                    <h1 style="margin: 0;">Dark Forest Blog Network</h1>
+                    <p class="tagline" style="margin: 5px 0 0 0;">AI-Powered Autonomous Content Generation</p>
+                </div>
+            </div>
             
             <div class="stats">
                 <div class="stat">
