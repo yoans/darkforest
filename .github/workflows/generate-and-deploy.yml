@@ -47,16 +47,19 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          cd generators
-          node openai-content-pipeline.js batch ${{ github.event.inputs.post_count || '1' }}
+          node generators/openai-content-pipeline.js batch ${{ github.event.inputs.post_count || '1' }}
       
       - name: 📊 Content statistics
         run: |
           echo "## 📈 Content Generation Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Blogs**: $(find output -maxdepth 1 -type d | tail -n +2 | wc -l)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Posts**: $(find output -name '*.html' | wc -l)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Total Size**: $(du -sh output | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          if [ -d "output" ]; then
+            echo "- **Blogs**: $(find output -maxdepth 1 -type d 2>/dev/null | tail -n +2 | wc -l)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Posts**: $(find output -name '*.html' 2>/dev/null | wc -l)" >> $GITHUB_STEP_SUMMARY
+            echo "- **Total Size**: $(du -sh output 2>/dev/null | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status**: No content generated yet" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Generated on: $(date)" >> $GITHUB_STEP_SUMMARY
       
@@ -64,6 +67,11 @@ jobs:
         run: |
           chmod +x scripts/deploy-production.sh
           bash scripts/deploy-production.sh
+          echo "📁 Deploy directory contents:"
+          ls -la deploy/
+          echo ""
+          echo "📄 Files to deploy:"
+          find deploy/ -type f | head -20
       
       - name: 📤 Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
@@ -72,6 +80,7 @@ jobs:
           publish_dir: ./deploy
           publish_branch: gh-pages
           cname: ${{ secrets.CUSTOM_DOMAIN }}  # Optional: your custom domain
+          force_orphan: true  # Clean gh-pages branch on each deploy
       
       - name: ✅ Deployment complete
         run: |
