@@ -42,16 +42,27 @@ OPENAI_API_KEY=your-key ALWAYS_ON=true pnpm dev
 
 ### For One-Off Batch Generation
 
-Use the GitHub Actions workflow:
+Use the Always-On Agent System API:
 
 ```bash
-# Trigger via GitHub Actions UI or:
-node generators/openai-content-pipeline.js batch 5
+# Start the agent service
+cd apps/agents && pnpm dev
+
+# In another terminal, trigger the pipeline
+curl -X POST http://localhost:8916/api/orchestrator/trigger-pipeline \
+  -H "Content-Type: application/json" \
+  -d '{}'
 ```
+
+Or use GitHub Actions workflow for automated generation.
 
 ### For Quick Testing
 
 ```bash
+# Use the agent service
+cd apps/agents && OPENAI_API_KEY=your-key npx tsx src/index.ts
+
+# Or for simple HTML generation without AI
 node generators/simple-blog-generator.js
 ```
 

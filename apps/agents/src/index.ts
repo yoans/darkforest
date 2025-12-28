@@ -31,6 +31,9 @@ const config: AgentConfig = {
   periodicIntervalMs: parseInt(process.env.PERIODIC_INTERVAL_MS || '3600000', 10), // 1 hour default
 };
 
+// Configuration constants
+const CONTINUOUS_LOOP_DELAY_MS = 100; // Delay between queue checks in continuous mode
+
 // Always-On Agent Orchestrator - Core of the Dark Forest
 class AlwaysOnOrchestrator extends EventEmitter {
   private agents: Map<string, Agent> = new Map();
@@ -102,7 +105,7 @@ class AlwaysOnOrchestrator extends EventEmitter {
 
   async start(): Promise<void> {
     if (this.isRunning) {
-      logger.warn('Orchestrator already running');
+      logger.warn('Orchestrator already running, start request ignored');
       return;
     }
 
@@ -149,7 +152,7 @@ class AlwaysOnOrchestrator extends EventEmitter {
           await this.executeTask(task);
         }
         // Small delay to prevent CPU spinning
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, CONTINUOUS_LOOP_DELAY_MS));
       }
     };
     processLoop().catch(err => logger.error('Continuous loop error:', err));
@@ -236,14 +239,15 @@ class AlwaysOnOrchestrator extends EventEmitter {
     }
 
     // Step 2: Content Generation
-    const topics = (results.strategy.data as any)?.strategy?.topics || [{ title: 'AI in Business', keyword: 'AI business' }];
-    const firstTopic = topics[0];
+    const topics = (results.strategy.data as Record<string, unknown>)?.strategy as { topics?: Array<{ title?: string; keyword?: string }> } | undefined;
+    const topicList = topics?.topics || [{ title: 'AI in Business', keyword: 'AI business' }];
+    const firstTopic = topicList.length > 0 ? topicList[0] : { title: 'AI in Business', keyword: 'AI business' };
 
     const contentTask: AgentTask = {
       id: `${pipelineId}_content`,
       type: 'CONTENT_GENERATION',
       data: { 
-        topic: firstTopic.title || firstTopic,
+        topic: firstTopic.title || 'AI in Business',
         keyword: firstTopic.keyword || 'AI technology',
         wordCount: 1200,
         tone: 'professional',
