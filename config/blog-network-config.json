@@ -320,6 +320,432 @@
           "facebook": true
         }
       }
+    },
+    
+    {
+      "id": "sustainable-tech-future",
+      "name": "Sustainable Tech Future",
+      "tagline": "Green Technology for a Better Tomorrow",
+      "domain": "sustainabletechfuture.com",
+      "niche": "Green Technology and Sustainability",
+      "targetAudience": {
+        "primary": "Environmentally conscious tech enthusiasts",
+        "secondary": "Corporate sustainability managers and investors",
+        "ageRange": "25-50",
+        "interests": ["renewable energy", "electric vehicles", "sustainable tech", "green business"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 3,
+        "wordCountRange": [1200, 2200],
+        "tone": "optimistic, educational, solution-focused",
+        "contentTypes": ["technology reviews", "sustainability guides", "industry analysis", "innovation spotlights"],
+        "keyTopics": [
+          "Renewable energy technology",
+          "Electric vehicles and transportation",
+          "Sustainable manufacturing",
+          "Green computing and data centers",
+          "Corporate sustainability practices"
+        ],
+        "seoKeywords": {
+          "primary": ["green technology", "sustainable tech", "renewable energy", "eco-friendly technology"],
+          "secondary": ["electric vehicles", "clean energy", "sustainable business", "green innovation"]
+        }
+      },
+      "theme": {
+        "template": "eco-modern",
+        "colors": {
+          "primary": "#059669",
+          "secondary": "#6b7280",
+          "accent": "#10b981",
+          "background": "#f0fdf4",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "'Nunito', sans-serif",
+          "body": "'Open Sans', sans-serif",
+          "code": "'Fira Code', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Sustainable Tech Future",
+          "icon": "🌱"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "minimal",
+          "footerStyle": "detailed"
+        }
+      },
+      "monetization": {
+        "priority": "medium",
+        "strategies": ["affiliate-marketing", "display-ads", "sponsored-content"],
+        "productCategories": ["solar panels", "electric vehicles", "eco-products", "green investments"]
+      },
+      "publishing": {
+        "schedule": "Mon, Wed, Fri 10am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": true
+        }
+      }
+    },
+    
+    {
+      "id": "personal-finance-mastery",
+      "name": "Personal Finance Mastery",
+      "tagline": "Build Wealth, Achieve Freedom",
+      "domain": "personalfinancemastery.com",
+      "niche": "Personal Finance and Investing",
+      "targetAudience": {
+        "primary": "Young professionals and aspiring investors",
+        "secondary": "Families and retirement planners",
+        "ageRange": "25-55",
+        "interests": ["investing", "budgeting", "passive income", "financial freedom"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 4,
+        "wordCountRange": [1200, 2500],
+        "tone": "encouraging, practical, trustworthy",
+        "contentTypes": ["how-to guides", "investment analysis", "budgeting tips", "product comparisons"],
+        "keyTopics": [
+          "Stock market investing basics",
+          "Building passive income streams",
+          "Budgeting and saving strategies",
+          "Retirement planning",
+          "Side hustle opportunities"
+        ],
+        "seoKeywords": {
+          "primary": ["personal finance", "investing for beginners", "passive income", "budgeting tips"],
+          "secondary": ["financial freedom", "stock investing", "save money", "retirement planning"]
+        }
+      },
+      "theme": {
+        "template": "finance-trust",
+        "colors": {
+          "primary": "#0d9488",
+          "secondary": "#64748b",
+          "accent": "#14b8a6",
+          "background": "#ffffff",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "'Merriweather', serif",
+          "body": "'Source Sans Pro', sans-serif",
+          "code": "'IBM Plex Mono', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Personal Finance Mastery",
+          "icon": "💰"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "classic",
+          "footerStyle": "detailed"
+        }
+      },
+      "monetization": {
+        "priority": "very-high",
+        "strategies": ["affiliate-marketing", "display-ads", "sponsored-content", "email-courses"],
+        "productCategories": ["investment platforms", "budgeting apps", "credit cards", "financial courses"]
+      },
+      "publishing": {
+        "schedule": "Tue, Thu, Sat, Sun 9am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": true
+        }
+      }
+    },
+    
+    {
+      "id": "health-wellness-hub",
+      "name": "Health & Wellness Hub",
+      "tagline": "Your Guide to a Healthier Life",
+      "domain": "healthwellnesshub.com",
+      "niche": "Health and Wellness",
+      "targetAudience": {
+        "primary": "Health-conscious individuals seeking lifestyle improvements",
+        "secondary": "Fitness enthusiasts and wellness seekers",
+        "ageRange": "25-55",
+        "interests": ["fitness", "nutrition", "mental health", "wellness routines"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 5,
+        "wordCountRange": [1000, 2000],
+        "tone": "supportive, evidence-based, motivational",
+        "contentTypes": ["fitness guides", "nutrition tips", "product reviews", "wellness routines"],
+        "keyTopics": [
+          "Home workout routines",
+          "Healthy eating habits",
+          "Mental wellness practices",
+          "Sleep optimization",
+          "Supplement guides"
+        ],
+        "seoKeywords": {
+          "primary": ["health tips", "wellness routine", "fitness at home", "healthy eating"],
+          "secondary": ["mental health", "workout routine", "nutrition guide", "sleep better"]
+        }
+      },
+      "theme": {
+        "template": "wellness-calm",
+        "colors": {
+          "primary": "#f472b6",
+          "secondary": "#6b7280",
+          "accent": "#fb7185",
+          "background": "#fff1f2",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "'Quicksand', sans-serif",
+          "body": "'Lato', sans-serif",
+          "code": "'Source Code Pro', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Health & Wellness Hub",
+          "icon": "🧘"
+        },
+        "layout": {
+          "sidebar": false,
+          "headerStyle": "minimal",
+          "footerStyle": "minimal"
+        }
+      },
+      "monetization": {
+        "priority": "high",
+        "strategies": ["affiliate-marketing", "display-ads", "product-reviews"],
+        "productCategories": ["fitness equipment", "supplements", "wellness apps", "health courses"]
+      },
+      "publishing": {
+        "schedule": "weekdays 8am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "instagram": true,
+          "pinterest": true
+        }
+      }
+    },
+    
+    {
+      "id": "productivity-hacks",
+      "name": "Productivity Hacks",
+      "tagline": "Work Smarter, Not Harder",
+      "domain": "productivityhacks.io",
+      "niche": "Productivity and Personal Development",
+      "targetAudience": {
+        "primary": "Busy professionals seeking efficiency",
+        "secondary": "Entrepreneurs and freelancers",
+        "ageRange": "25-45",
+        "interests": ["productivity", "time management", "tools", "habits"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 4,
+        "wordCountRange": [1000, 1800],
+        "tone": "actionable, concise, motivating",
+        "contentTypes": ["tool reviews", "productivity tips", "workflow guides", "habit building"],
+        "keyTopics": [
+          "Time management techniques",
+          "Productivity apps and tools",
+          "Building effective habits",
+          "Focus and deep work",
+          "Workflow automation"
+        ],
+        "seoKeywords": {
+          "primary": ["productivity tips", "time management", "productivity apps", "work efficiency"],
+          "secondary": ["focus techniques", "habit building", "productivity tools", "deep work"]
+        }
+      },
+      "theme": {
+        "template": "productivity-clean",
+        "colors": {
+          "primary": "#6366f1",
+          "secondary": "#64748b",
+          "accent": "#818cf8",
+          "background": "#f8fafc",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "'Inter', sans-serif",
+          "body": "'Inter', sans-serif",
+          "code": "'JetBrains Mono', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Productivity Hacks",
+          "icon": "⚡"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "minimal",
+          "footerStyle": "minimal"
+        }
+      },
+      "monetization": {
+        "priority": "high",
+        "strategies": ["affiliate-marketing", "display-ads", "tool-reviews"],
+        "productCategories": ["productivity software", "time tracking tools", "online courses", "planners"]
+      },
+      "publishing": {
+        "schedule": "Mon, Wed, Fri, Sun 7am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": false
+        }
+      }
+    },
+    
+    {
+      "id": "ecommerce-insights",
+      "name": "E-Commerce Insights",
+      "tagline": "Grow Your Online Business",
+      "domain": "ecommerceinsights.co",
+      "niche": "E-Commerce and Online Business",
+      "targetAudience": {
+        "primary": "E-commerce store owners and entrepreneurs",
+        "secondary": "Dropshippers and Amazon sellers",
+        "ageRange": "25-50",
+        "interests": ["e-commerce", "dropshipping", "Amazon FBA", "Shopify"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 4,
+        "wordCountRange": [1300, 2500],
+        "tone": "strategic, data-driven, encouraging",
+        "contentTypes": ["platform guides", "case studies", "tool comparisons", "strategy guides"],
+        "keyTopics": [
+          "Shopify store optimization",
+          "Amazon FBA strategies",
+          "Dropshipping best practices",
+          "E-commerce marketing",
+          "Product sourcing"
+        ],
+        "seoKeywords": {
+          "primary": ["e-commerce tips", "Shopify store", "Amazon FBA", "dropshipping guide"],
+          "secondary": ["online store", "e-commerce marketing", "product sourcing", "sell online"]
+        }
+      },
+      "theme": {
+        "template": "ecommerce-pro",
+        "colors": {
+          "primary": "#f59e0b",
+          "secondary": "#64748b",
+          "accent": "#fbbf24",
+          "background": "#ffffff",
+          "text": "#1e293b"
+        },
+        "fonts": {
+          "heading": "'Poppins', sans-serif",
+          "body": "'Nunito Sans', sans-serif",
+          "code": "'Fira Code', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "E-Commerce Insights",
+          "icon": "🛒"
+        },
+        "layout": {
+          "sidebar": true,
+          "headerStyle": "bold",
+          "footerStyle": "detailed"
+        }
+      },
+      "monetization": {
+        "priority": "very-high",
+        "strategies": ["affiliate-marketing", "sponsored-content", "display-ads", "tool-partnerships"],
+        "productCategories": ["e-commerce platforms", "marketing tools", "dropshipping suppliers", "courses"]
+      },
+      "publishing": {
+        "schedule": "Tue, Thu, Sat, Sun 10am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "linkedin": true,
+          "facebook": true
+        }
+      }
+    },
+    
+    {
+      "id": "creative-ai-studio",
+      "name": "Creative AI Studio",
+      "tagline": "AI-Powered Creativity Unleashed",
+      "domain": "creativeaistudio.com",
+      "niche": "AI in Creative Arts",
+      "targetAudience": {
+        "primary": "Creatives, designers, and digital artists",
+        "secondary": "Content creators and marketers",
+        "ageRange": "20-45",
+        "interests": ["AI art", "generative AI", "design tools", "creative workflows"]
+      },
+      "contentStrategy": {
+        "postsPerWeek": 4,
+        "wordCountRange": [1000, 2000],
+        "tone": "creative, inspiring, hands-on",
+        "contentTypes": ["tool tutorials", "prompt guides", "creative showcases", "workflow tips"],
+        "keyTopics": [
+          "AI image generation tools",
+          "Prompt engineering for artists",
+          "AI video and music creation",
+          "Integrating AI into creative workflows",
+          "AI art marketplaces"
+        ],
+        "seoKeywords": {
+          "primary": ["AI art", "AI image generator", "generative AI", "AI design tools"],
+          "secondary": ["Midjourney guide", "DALL-E tutorial", "AI creative tools", "prompt engineering"]
+        }
+      },
+      "theme": {
+        "template": "creative-gradient",
+        "colors": {
+          "primary": "#ec4899",
+          "secondary": "#8b5cf6",
+          "accent": "#f472b6",
+          "background": "#faf5ff",
+          "text": "#1e1b4b"
+        },
+        "fonts": {
+          "heading": "'Space Grotesk', sans-serif",
+          "body": "'DM Sans', sans-serif",
+          "code": "'Fira Code', monospace"
+        },
+        "logo": {
+          "type": "text",
+          "content": "Creative AI Studio",
+          "icon": "🎨"
+        },
+        "layout": {
+          "sidebar": false,
+          "headerStyle": "creative",
+          "footerStyle": "minimal"
+        }
+      },
+      "monetization": {
+        "priority": "high",
+        "strategies": ["affiliate-marketing", "sponsored-content", "display-ads", "digital-products"],
+        "productCategories": ["AI art tools", "design software", "creative courses", "prompt packs"]
+      },
+      "publishing": {
+        "schedule": "Mon, Wed, Thu, Sat 11am EST",
+        "autoPublish": true,
+        "requiresReview": false,
+        "socialSharing": {
+          "twitter": true,
+          "instagram": true,
+          "youtube": true
+        }
+      }
     }
   ],
   
