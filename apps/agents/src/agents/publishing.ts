@@ -6,6 +6,10 @@ export class PublishingAgent extends Agent {
   type = 'PUBLISHING';
   version = '1.0.0';
 
+  constructor() {
+    super();
+  }
+
   async execute(task: AgentTask): Promise<AgentResult> {
     try {
       switch (task.type) {
@@ -37,7 +41,14 @@ export class PublishingAgent extends Agent {
   }
 
   private async publishPost(task: AgentTask): Promise<AgentResult> {
-    const { postId, siteId, content, metadata } = task.data;
+    const taskData = task.data as {
+      postId?: string;
+      siteId?: string;
+      content?: Record<string, unknown>;
+      metadata?: Record<string, unknown>;
+    };
+    
+    const { siteId = 'default', content = {}, metadata = {} } = taskData;
     
     try {
       // 1. Format content for CMS
@@ -72,7 +83,8 @@ export class PublishingAgent extends Agent {
   }
 
   private async schedulePost(task: AgentTask): Promise<AgentResult> {
-    const { postId, publishAt, timezone = 'UTC' } = task.data;
+    const taskData = task.data as { postId?: string; publishAt?: string; timezone?: string };
+    const { postId = '', publishAt = '', timezone = 'UTC' } = taskData;
     
     // Schedule the post for future publication
     // This would integrate with your scheduling system (cron, agenda, etc.)
@@ -86,10 +98,11 @@ export class PublishingAgent extends Agent {
   }
 
   private async updatePost(task: AgentTask): Promise<AgentResult> {
-    const { postId, updates, siteId } = task.data;
+    const taskData = task.data as { postId?: string; updates?: Record<string, unknown>; siteId?: string };
+    const { postId = '', updates = {}, siteId = 'default' } = taskData;
     
     try {
-      const updateResult = await this.updateInCMS(siteId, postId, updates);
+      await this.updateInCMS(siteId, postId, updates);
       
       return this.createSuccessResult({
         updated: true,
@@ -104,9 +117,13 @@ export class PublishingAgent extends Agent {
   }
 
   private async generateSocialPosts(task: AgentTask): Promise<AgentResult> {
-    const { article, platforms = ['twitter', 'linkedin'] } = task.data;
+    const taskData = task.data as { 
+      article?: { url?: string; title?: string; excerpt?: string; tags?: string[] }; 
+      platforms?: string[] 
+    };
+    const { article = {}, platforms = ['twitter', 'linkedin'] } = taskData;
     
-    const socialPosts = {
+    const socialPosts: Record<string, string> = {
       twitter: this.generateTwitterPost(article),
       linkedin: this.generateLinkedInPost(article),
       facebook: this.generateFacebookPost(article)
@@ -119,7 +136,7 @@ export class PublishingAgent extends Agent {
     return this.createSuccessResult({
       socialPosts: filteredPosts,
       platforms,
-      articleUrl: article.url
+      articleUrl: article.url || ''
     });
   }
 
@@ -202,28 +219,28 @@ export class PublishingAgent extends Agent {
     };
   }
 
-  private generateOpenGraphTags(content: any, metadata: any) {
+  private generateOpenGraphTags(content: Record<string, unknown>, metadata: Record<string, unknown>) {
     return {
-      "og:title": content.title,
-      "og:description": content.metaDescription,
+      "og:title": content.title || '',
+      "og:description": content.metaDescription || '',
       "og:type": "article",
-      "og:image": metadata.featuredImage || metadata.defaultImage
+      "og:image": metadata.featuredImage || metadata.defaultImage || ''
     };
   }
 
-  private generateTwitterTags(content: any, metadata: any) {
+  private generateTwitterTags(content: Record<string, unknown>, metadata: Record<string, unknown>) {
     return {
       "twitter:card": "summary_large_image",
-      "twitter:title": content.title,
-      "twitter:description": content.metaDescription,
-      "twitter:image": metadata.featuredImage || metadata.defaultImage
+      "twitter:title": content.title || '',
+      "twitter:description": content.metaDescription || '',
+      "twitter:image": metadata.featuredImage || metadata.defaultImage || ''
     };
   }
 
-  private generateTwitterPost(article: any): string {
+  private generateTwitterPost(article: { url?: string; title?: string; tags?: string[] }): string {
     const maxLength = 280;
-    const title = article.title;
-    const url = article.url;
+    const title = article.title || 'New Article';
+    const url = article.url || '';
     const hashtags = article.tags?.slice(0, 2).map((tag: string) => `#${tag}`).join(' ') || '';
     
     let tweet = `${title}\n\n${url}`;
@@ -234,11 +251,11 @@ export class PublishingAgent extends Agent {
     return tweet.length <= maxLength ? tweet : `${title.slice(0, maxLength - url.length - 10)}...\n\n${url}`;
   }
 
-  private generateLinkedInPost(article: any): string {
-    return `${article.title}\n\n${article.excerpt}\n\nRead more: ${article.url}\n\n${article.tags?.map((tag: string) => `#${tag}`).join(' ') || ''}`;
+  private generateLinkedInPost(article: { url?: string; title?: string; excerpt?: string; tags?: string[] }): string {
+    return `${article.title || ''}\n\n${article.excerpt || ''}\n\nRead more: ${article.url || ''}\n\n${article.tags?.map((tag: string) => `#${tag}`).join(' ') || ''}`;
   }
 
-  private generateFacebookPost(article: any): string {
-    return `${article.title}\n\n${article.excerpt}\n\n${article.url}`;
+  private generateFacebookPost(article: { url?: string; title?: string; excerpt?: string }): string {
+    return `${article.title || ''}\n\n${article.excerpt || ''}\n\n${article.url || ''}`;
   }
 }

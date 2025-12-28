@@ -42,13 +42,16 @@ export class StrategyAgent extends Agent {
   }
 
   private async planContentStrategy(task: AgentTask): Promise<AgentResult> {
-    const { siteConfig, timeframe = '1week' } = task.data;
+    const { siteConfig, timeframe = '1week' } = task.data as { 
+      siteConfig: { niche: string; audience: string; postsPerWeek: number; goals: string[] }; 
+      timeframe?: string 
+    };
     
     const prompt = `
-    Create a content strategy for a ${siteConfig.niche} blog with these details:
-    - Target audience: ${siteConfig.audience}
-    - Posting frequency: ${siteConfig.postsPerWeek} posts per week
-    - Content goals: ${siteConfig.goals.join(', ')}
+    Create a content strategy for a ${siteConfig?.niche || 'general'} blog with these details:
+    - Target audience: ${siteConfig?.audience || 'general audience'}
+    - Posting frequency: ${siteConfig?.postsPerWeek || 3} posts per week
+    - Content goals: ${siteConfig?.goals?.join(', ') || 'traffic, engagement'}
     - Timeframe: ${timeframe}
     
     Provide:

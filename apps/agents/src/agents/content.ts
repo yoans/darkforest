@@ -42,14 +42,23 @@ export class ContentAgent extends Agent {
   }
 
   private async generateArticle(task: AgentTask): Promise<AgentResult> {
+    const taskData = task.data as {
+      topic?: string;
+      keyword?: string;
+      wordCount?: number;
+      tone?: string;
+      audience?: string;
+      siteConfig?: { niche?: string; brandVoice?: string };
+    };
+    
     const { 
-      topic, 
-      keyword, 
+      topic = 'AI Technology', 
+      keyword = 'AI', 
       wordCount = 1000, 
       tone = 'professional',
-      audience,
+      audience = 'general audience',
       siteConfig 
-    } = task.data;
+    } = taskData;
 
     const prompt = `
     Write a comprehensive ${wordCount}-word article about "${topic}" targeting the keyword "${keyword}".
@@ -64,7 +73,7 @@ export class ContentAgent extends Agent {
     - Ensure readability score above 60
     - Add meta description (150-160 characters)
     
-    Blog niche: ${siteConfig?.niche}
+    Blog niche: ${siteConfig?.niche || 'technology'}
     Brand voice: ${siteConfig?.brandVoice || 'authoritative yet approachable'}
     
     Format as JSON:
@@ -135,7 +144,13 @@ export class ContentAgent extends Agent {
   }
 
   private async optimizeContent(task: AgentTask): Promise<AgentResult> {
-    const { content, targetKeywords, optimizationGoals } = task.data;
+    const taskData = task.data as {
+      content?: string;
+      targetKeywords?: string[];
+      optimizationGoals?: string[];
+    };
+    
+    const { content = '', targetKeywords = [], optimizationGoals = [] } = taskData;
 
     const prompt = `
     Optimize this existing content for SEO and readability:
