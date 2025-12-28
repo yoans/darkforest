@@ -273,85 +273,103 @@ export default function HomePage() {
       <section id="network" className="py-20 bg-black/30">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-purple-400">
-            🌐 The Growing Blog Network
+            🌐 Your Blog Network
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                name: 'Tech Sustainability Hub',
-                domain: 'techsustainability.blog',
-                niche: 'Sustainable Technology',
-                posts: 247,
-                monthly: '45K',
-                revenue: '$1,200'
+                id: 'ai-business-insights',
+                name: 'AI Business Insights',
+                icon: '🤖',
+                niche: 'AI and Business Technology',
+                color: '#2563eb'
               },
               {
-                name: 'AI Innovation Weekly', 
-                domain: 'aiinnovation.blog',
-                niche: 'Artificial Intelligence',
-                posts: 189,
-                monthly: '38K',
-                revenue: '$950'
+                id: 'remote-work-revolution',
+                name: 'Remote Work Revolution', 
+                icon: '🌍',
+                niche: 'Remote Work & Digital Nomad',
+                color: '#10b981'
               },
               {
-                name: 'Health & Wellness Pro',
-                domain: 'healthwellnesspro.blog', 
+                id: 'cybersecurity-today',
+                name: 'Cybersecurity Today',
+                icon: '🔒', 
+                niche: 'Cybersecurity & Privacy',
+                color: '#ef4444'
+              },
+              {
+                id: 'marketing-automation-hub',
+                name: 'Marketing Automation Hub',
+                icon: '📈',
+                niche: 'Marketing & Growth',
+                color: '#8b5cf6'
+              },
+              {
+                id: 'sustainable-tech-future',
+                name: 'Sustainable Tech Future',
+                icon: '🌱',
+                niche: 'Green Technology',
+                color: '#059669'
+              },
+              {
+                id: 'personal-finance-mastery',
+                name: 'Personal Finance Mastery',
+                icon: '💰',
+                niche: 'Finance & Investing',
+                color: '#0d9488'
+              },
+              {
+                id: 'health-wellness-hub',
+                name: 'Health & Wellness Hub',
+                icon: '🧘',
                 niche: 'Health & Fitness',
-                posts: 312,
-                monthly: '52K',
-                revenue: '$1,400'
+                color: '#f472b6'
               },
               {
-                name: 'Finance Freedom Path',
-                domain: 'financefreedom.blog',
-                niche: 'Personal Finance',
-                posts: 156,
-                monthly: '29K',
-                revenue: '$800'
+                id: 'productivity-hacks',
+                name: 'Productivity Hacks',
+                icon: '⚡',
+                niche: 'Productivity & Tools',
+                color: '#6366f1'
               },
               {
-                name: 'Digital Marketing Edge',
-                domain: 'marketingedge.blog',
-                niche: 'Digital Marketing', 
-                posts: 203,
-                monthly: '41K',
-                revenue: '$1,100'
+                id: 'ecommerce-insights',
+                name: 'E-Commerce Insights',
+                icon: '🛒',
+                niche: 'Online Business',
+                color: '#f59e0b'
               },
               {
-                name: 'Productivity Mastery',
-                domain: 'productivitymastery.blog',
-                niche: 'Productivity & Lifestyle',
-                posts: 178,
-                monthly: '33K',
-                revenue: '$750'
+                id: 'creative-ai-studio',
+                name: 'Creative AI Studio',
+                icon: '🎨',
+                niche: 'AI in Creative Arts',
+                color: '#ec4899'
               }
             ].map((blog) => (
-              <div key={blog.name} className="bg-gray-900/80 backdrop-blur-md rounded-lg p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+              <a 
+                key={blog.id} 
+                href={`/${blog.id}`}
+                className="bg-gray-900/80 backdrop-blur-md rounded-lg p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:scale-105 cursor-pointer block"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-xs text-gray-400">Live</span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-white mb-2">{blog.name}</h3>
-                <div className="text-purple-400 text-sm mb-3">{blog.domain}</div>
-                <div className="text-gray-400 text-sm mb-4">{blog.niche}</div>
-
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <div className="text-lg font-bold text-green-400">{blog.posts}</div>
-                    <div className="text-xs text-gray-400">Posts</div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-blue-400">{blog.monthly}</div>
-                    <div className="text-xs text-gray-400">Monthly Views</div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-yellow-400">{blog.revenue}</div>
-                    <div className="text-xs text-gray-400">Monthly Revenue</div>
-                  </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">{blog.icon}</span>
+                  <h3 className="text-lg font-semibold text-white">{blog.name}</h3>
                 </div>
-              </div>
+                <div className="text-sm mb-4" style={{ color: blog.color }}>{blog.niche}</div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-400">AI-Powered Content</span>
+                  <span className="text-sm font-medium" style={{ color: blog.color }}>Visit →</span>
+                </div>
+              </a>
             ))}
           </div>
         </div>

@@ -51,6 +51,8 @@ jobs:
         run: |
           pnpm build
           touch out/.nojekyll
+          # Copy CNAME for custom domain
+          cp ../../CNAME out/CNAME || echo "No CNAME file found"
         env:
           NODE_ENV: production
           
