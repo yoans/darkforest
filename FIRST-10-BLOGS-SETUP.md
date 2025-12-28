@@ -1,6 +1,6 @@
 # 🚀 Your First 10 Blogs: Baby Steps Setup Guide
 
-Welcome! This guide walks you through setting up your AI-powered blog network at `darkforest.sagaciasoft.com/blogname`. Follow each step carefully - we'll hold your hand through the entire process.
+Welcome! This guide walks you through setting up your AI-powered blog network at `darkforest.sagaciasoft.com/blogname`. Follow each step carefully - we'll guide you through the entire process.
 
 ---
 
