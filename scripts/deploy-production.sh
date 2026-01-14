@@ -428,6 +428,10 @@ INDEXEOF
 echo "📄 Creating .nojekyll..."
 touch "$DEPLOY_DIR/.nojekyll"
 
+# Create CNAME file for custom domain
+echo "📄 Creating CNAME..."
+echo "darkforest.sagaciasoft.com" > "$DEPLOY_DIR/CNAME"
+
 # NOTE: Removed README.md to prevent CDN/Jekyll from using it as index
 
 # Summary
