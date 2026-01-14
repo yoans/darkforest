@@ -245,11 +245,10 @@ backups/
 *.backup.*
 
 # ===============================
-# Lock Files (Keep package-lock.json)
+# Lock Files (Keep package-lock.json and pnpm-lock.yaml)
 # ===============================
 yarn.lock
-pnpm-lock.yaml
-# Keep package-lock.json for npm projects
+# Keep package-lock.json and pnpm-lock.yaml for CI/CD
 
 # ===============================
 # Custom Project Exclusions
