@@ -2,8 +2,8 @@ name: Generate and Deploy Blog Content
 
 on:
   # Run on schedule (daily at 2 AM UTC)
-  schedule:
-    - cron: '0 2 * * *'
+  #schedule:
+  #  - cron: '0 2 * * *'
   
   # Allow manual trigger
   workflow_dispatch:
