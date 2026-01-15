@@ -18,7 +18,7 @@
 
 # GITHUB_TOKEN (automatically available for public repos)
 # Custom domain secrets (if applicable):
-# CUSTOM_DOMAIN=darkforest.network
+# CUSTOM_DOMAIN=darkforest.sagaciasoft.com
 ```
 
 ### 3. Update Repository Settings
@@ -42,19 +42,19 @@ git push origin main
 
 ## Custom Domain Setup (Optional)
 
-### If you own a domain (e.g., darkforest.network):
+### If you own a domain (e.g., darkforest.sagaciasoft.com):
 
 ```bash
 # 1. Create CNAME file
-echo "darkforest.network" > apps/showcase-blog/public/CNAME
+echo "darkforest.sagaciasoft.com" > apps/showcase-blog/public/CNAME
 
 # 2. Configure DNS at your registrar:
 # Type: CNAME
 # Host: @ (or www)
-# Value: yourusername.github.io
+# Value: yoans.github.io
 
 # 3. Update GitHub Pages settings:
-# Settings > Pages > Custom domain: darkforest.network
+# Settings > Pages > Custom domain: darkforest.sagaciasoft.com
 ```
 
 ## Automated Deployment Features
@@ -116,12 +116,12 @@ After deployment, your site will be available at:
 
 ### GitHub Pages URL:
 ```
-https://yourusername.github.io/dark-forest-network/
+https://yoans.github.io/dark-forest-network/
 ```
 
 ### Custom Domain (if configured):
 ```
-https://darkforest.network/
+https://darkforest.sagaciasoft.com/
 ```
 
 ## Troubleshooting

@@ -25,6 +25,14 @@ echo "📦 Preparing deployment directory..."
 rm -rf "$DEPLOY_DIR"
 mkdir -p "$DEPLOY_DIR"
 
+# Copy CNAME file for custom domain
+echo "🌐 Setting up custom domain..."
+cp CNAME "$DEPLOY_DIR/" 2>/dev/null || echo "darkforest.sagaciasoft.com" > "$DEPLOY_DIR/CNAME"
+echo "  ✓ CNAME set to $(cat $DEPLOY_DIR/CNAME)"
+
+# Create .nojekyll to bypass Jekyll processing
+touch "$DEPLOY_DIR/.nojekyll"
+
 # Copy Dark Forest logo
 echo "🎨 Copying Dark Forest logo..."
 if [ -f "darkforest.svg" ]; then

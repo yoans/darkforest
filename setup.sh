@@ -50,7 +50,7 @@ if [ ! -f .env ]; then
     
     read -p "🌐 Enter your custom domain (optional, press Enter to skip): " custom_domain
     if [ -n "$custom_domain" ]; then
-        sed -i "s/darkforest.network/$custom_domain/g" .env
+        sed -i "s/darkforest.sagaciasoft.com/$custom_domain/g" .env
         echo "✅ Custom domain configured"
     fi
 else
@@ -144,7 +144,7 @@ echo ""
 
 echo "🆘 Need Help?"
 echo "   • GitHub Issues: https://github.com/yoans/darkforest/issues"
-echo "   • Documentation: https://darkforest.network/docs"
+echo "   • Documentation: https://darkforest.sagaciasoft.com/docs"
 echo ""
 
 echo "Happy blogging with AI agents! 🤖📝"

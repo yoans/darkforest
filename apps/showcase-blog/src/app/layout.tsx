@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: 'Dark Forest Network - AI Blog Automation in Action',
     description: 'Witness 8 AI agents working together to create, optimize, and monetize content across multiple blogs',
     type: 'website',
-    url: 'https://darkforest.network',
+    url: 'https://darkforest.sagaciasoft.com',
   },
   twitter: {
     card: 'summary_large_image',

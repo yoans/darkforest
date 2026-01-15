@@ -58,7 +58,7 @@ GITHUB_OWNER="yoans"  # Your GitHub username
 ```bash
 # Go to: https://analytics.google.com/
 # 1. Create account or sign in
-# 2. Create new property for "darkforest.network"
+# 2. Create new property for "darkforest.sagaciasoft.com"
 # 3. Copy Measurement ID (format: G-XXXXXXXXXX)
 # 4. Add to .env:
 GOOGLE_ANALYTICS_ID="G-XXXXXXXXXX"
@@ -110,14 +110,14 @@ GOOGLE_ADSENSE_CLIENT_ID="ca-pub-xxxxxxxxxx"
 
 ```bash
 # Go to: https://dash.cloudflare.com/
-# 1. Add your domain (darkforest.network)
+# 1. Add your domain (darkforest.sagaciasoft.com)
 # 2. Update nameservers at your domain registrar
 # 3. Go to API Tokens
 # 4. Create token with Zone:Edit permissions
 # 5. Add to .env:
 CLOUDFLARE_API_TOKEN="your-token-here"
 CLOUDFLARE_ZONE_ID="your-zone-id"
-CUSTOM_DOMAIN="darkforest.network"
+CUSTOM_DOMAIN="darkforest.sagaciasoft.com"
 ```
 
 ---

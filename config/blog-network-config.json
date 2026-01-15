@@ -2,10 +2,11 @@
   "network": {
     "name": "Dark Forest Blog Network",
     "description": "AI-powered autonomous blog network generating high-quality content across multiple niches",
+    "baseUrl": "https://darkforest.sagaciasoft.com",
     "owner": {
-      "name": "Dark Forest Media",
-      "email": "contact@darkforest.ai",
-      "website": "https://darkforest.ai"
+      "name": "Sagacia Soft",
+      "email": "contact@sagaciasoft.com",
+      "website": "https://sagaciasoft.com"
     },
     "analytics": {
       "googleAnalyticsId": "G-XXXXXXXXXX",
@@ -41,7 +42,7 @@
       "id": "ai-business-insights",
       "name": "AI Business Insights",
       "tagline": "Transforming Business with Artificial Intelligence",
-      "domain": "aibusinessinsights.com",
+      "domain": "darkforest.sagaciasoft.com/ai-business-insights",
       "niche": "AI and Business Technology",
       "targetAudience": {
         "primary": "Business executives and entrepreneurs",
@@ -112,7 +113,7 @@
       "id": "remote-work-revolution",
       "name": "Remote Work Revolution",
       "tagline": "The Future of Work is Here",
-      "domain": "remoteworkrev.com",
+      "domain": "darkforest.sagaciasoft.com/remote-work-revolution",
       "niche": "Remote Work and Digital Nomad Lifestyle",
       "targetAudience": {
         "primary": "Remote workers and digital nomads",
@@ -184,7 +185,7 @@
       "id": "cybersecurity-today",
       "name": "Cybersecurity Today",
       "tagline": "Protecting Your Digital Future",
-      "domain": "cybersecuritytoday.net",
+      "domain": "darkforest.sagaciasoft.com/cybersecurity-today",
       "niche": "Cybersecurity and Data Privacy",
       "targetAudience": {
         "primary": "IT professionals and security practitioners",
@@ -255,7 +256,7 @@
       "id": "marketing-automation-hub",
       "name": "Marketing Automation Hub",
       "tagline": "Scale Your Marketing with Automation",
-      "domain": "marketingautohub.com",
+      "domain": "darkforest.sagaciasoft.com/marketing-automation-hub",
       "niche": "Marketing Automation and Growth",
       "targetAudience": {
         "primary": "Marketing professionals and growth hackers",

@@ -87,15 +87,15 @@ pnpm run dev
 1. **Create GitHub repo** named `dark-forest-network`
 2. **Push your code** to the repo
 3. **Enable GitHub Pages** in Settings > Pages
-4. **Site auto-deploys** to `https://yourusername.github.io/dark-forest-network/`
+4. **Site auto-deploys** to `https://yoans.github.io/dark-forest-network/`
 
 ### Custom Domain (Optional)
 ```bash
-# If you own darkforest.network:
-echo "darkforest.network" > apps/showcase-blog/public/CNAME
+# If you own darkforest.sagaciasoft.com:
+echo "darkforest.sagaciasoft.com" > apps/showcase-blog/public/CNAME
 
 # Update DNS at your registrar:
-# Type: CNAME, Host: @, Value: yourusername.github.io
+# Type: CNAME, Host: @, Value: yoans.github.io
 ```
 
 ## 💰 Monetization Stack (FREE to Start)

@@ -268,7 +268,7 @@ Create specialized agents for:
 - 📖 **Documentation**: Full API docs available
 - 🐛 **Issues**: GitHub Issues for bugs
 - 💬 **Discord**: Community discussions  
-- 📧 **Email**: support@darkforest.ai
+- 📧 **Email**: support@sagaciasoft.com
 - 🔄 **Updates**: Automated update notifications
 
 ---

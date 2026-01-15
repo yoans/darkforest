@@ -5,8 +5,7 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/dark-forest-network' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/dark-forest-network/' : '',
+  // No basePath needed - using custom domain darkforest.sagaciasoft.com
 }
 
 module.exports = nextConfig
