@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Deploy when deploy folder changes
+  push:
+    branches:
+      - main
+    paths:
+      - 'deploy/**'
+      - 'scripts/deploy-production.sh'
+      - 'scripts/generate-blog-indexes.js'
+      - 'scripts/generate-showcase-index.js'
+  
+  # Manual trigger
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: 📑 Generate blog index pages
+        run: node scripts/generate-blog-indexes.js
+      
+      - name: 📤 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          publish_branch: gh-pages
+          cname: darkforest.sagaciasoft.com
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: '🚀 Deploy: updated content'
+      
+      - name: ✅ Done
+        run: |
+          echo "🎉 Deployed to https://darkforest.sagaciasoft.com"
