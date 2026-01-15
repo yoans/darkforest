@@ -59,6 +59,10 @@ for blog_dir in "$OUTPUT_DIR"/*; do
     fi
 done
 
+# Generate index.html for each blog
+echo "📑 Generating blog index pages..."
+node scripts/generate-blog-indexes.js
+
 # Load blog configuration
 echo "📊 Loading blog configuration..."
 if [ -f "$CONFIG_DIR/blog-network-config.json" ]; then
