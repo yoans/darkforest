@@ -11,24 +11,26 @@
     "analytics": {
       "googleAnalyticsId": "G-XXXXXXXXXX",
       "enableHeatmaps": true,
-      "enableSessionRecording": false
+      "enableSessionRecording": false,
+      "_comment": "Get your Analytics ID from https://analytics.google.com - replace G-XXXXXXXXXX"
     },
     "monetization": {
       "googleAdsense": {
         "enabled": true,
         "publisherId": "ca-pub-6184158318242318",
         "adSlots": {
-          "header": "XXXXXXXXXX",
-          "sidebar": "XXXXXXXXXX",
-          "inArticle": "XXXXXXXXXX",
-          "footer": "XXXXXXXXXX"
+          "header": "7637873246",
+          "sidebar": "1193730306",
+          "inArticle": "8236639041",
+          "footer": "3455903893"
         }
       },
       "amazonAssociates": {
         "enabled": true,
         "trackingId": "darkforest08-20",
         "apiKey": "",
-        "region": "US"
+        "region": "US",
+        "_comment": "Amazon Associates already configured with tracking ID darkforest08-20"
       },
       "affiliateLinks": {
         "enabled": true,
