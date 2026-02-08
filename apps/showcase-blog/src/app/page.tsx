@@ -475,16 +475,17 @@ export default function HomePage() {
             Get weekly insights on AI-powered content creation, blog monetization strategies,
             and the latest in autonomous publishing. Join 5,000+ subscribers.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
             <input
               type="email"
+              name="email"
               placeholder="Enter your email address"
               className="flex-1 px-6 py-4 rounded-lg bg-gray-900/80 border border-green-500/30 text-white placeholder-gray-500 focus:outline-none focus:border-green-500/60 transition-colors"
             />
-            <button className="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:scale-105 whitespace-nowrap">
+            <button type="submit" className="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:scale-105 whitespace-nowrap">
               Subscribe →
             </button>
-          </div>
+          </form>
           <p className="text-sm text-gray-500 mt-4">
             No spam, ever. Unsubscribe anytime. We respect your privacy.
           </p>
@@ -501,6 +502,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
+                id: 'ai-business-strategy',
                 title: 'How AI Is Reshaping Business Strategy in 2025',
                 excerpt: 'Discover how forward-thinking companies are leveraging AI agents to automate content pipelines and drive organic growth at scale.',
                 readTime: '8 min read',
@@ -508,6 +510,7 @@ export default function HomePage() {
                 tagClass: 'bg-green-500/20 text-green-400',
               },
               {
+                id: 'cybersecurity-remote-teams',
                 title: 'The Ultimate Guide to Cybersecurity for Remote Teams',
                 excerpt: 'With distributed workforces becoming the norm, protecting your digital assets requires a new approach to security protocols.',
                 readTime: '12 min read',
@@ -515,6 +518,7 @@ export default function HomePage() {
                 tagClass: 'bg-red-500/20 text-red-400',
               },
               {
+                id: 'content-marketing-trends',
                 title: '10 Content Marketing Trends That Will Dominate This Year',
                 excerpt: 'From AI-generated content to interactive media, these trends are reshaping how brands connect with their audiences online.',
                 readTime: '6 min read',
@@ -522,6 +526,7 @@ export default function HomePage() {
                 tagClass: 'bg-purple-500/20 text-purple-400',
               },
               {
+                id: 'remote-work-ai-tools',
                 title: 'Building a Productive Remote Work Routine with AI Tools',
                 excerpt: 'Learn how to leverage AI-powered productivity tools to stay focused, manage tasks, and collaborate effectively from anywhere.',
                 readTime: '7 min read',
@@ -529,6 +534,7 @@ export default function HomePage() {
                 tagClass: 'bg-blue-500/20 text-blue-400',
               },
               {
+                id: 'blog-monetization-data',
                 title: 'Monetizing Your Blog Network: A Data-Driven Approach',
                 excerpt: "Revenue optimization is both art and science. Here's how autonomous agents maximize earnings across multiple blogs simultaneously.",
                 readTime: '10 min read',
@@ -536,6 +542,7 @@ export default function HomePage() {
                 tagClass: 'bg-green-500/20 text-green-400',
               },
               {
+                id: 'zero-trust-architecture',
                 title: 'Zero Trust Architecture: Why Your Business Needs It Now',
                 excerpt: 'Traditional perimeter-based security is dead. Learn how zero trust models protect modern enterprises against evolving threats.',
                 readTime: '9 min read',
@@ -543,7 +550,7 @@ export default function HomePage() {
                 tagClass: 'bg-red-500/20 text-red-400',
               },
             ].map((article) => (
-              <div key={article.title} className="bg-gray-900/80 backdrop-blur-md rounded-lg overflow-hidden border border-blue-500/20 hover:border-blue-500/40 transition-all group">
+              <a key={article.id} href={`#${article.id}`} className="bg-gray-900/80 backdrop-blur-md rounded-lg overflow-hidden border border-blue-500/20 hover:border-blue-500/40 transition-all group block">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full ${article.tagClass}`}>
@@ -561,7 +568,7 @@ export default function HomePage() {
                     Read Article →
                   </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
