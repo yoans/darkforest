@@ -4,11 +4,19 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "dev:agents": "cd apps/agents && pnpm dev",
+    "dev:dashboard": "cd apps/dashboard && pnpm dev",
     "lint": "turbo run lint",
     "clean": "turbo run clean",
     "test": "turbo run test",
+    "test:agents": "cd apps/agents && pnpm test",
     "setup": "pnpm install && pnpm run db:setup",
-    "db:setup": "cd packages/database && pnpm run db:push && pnpm run db:seed"
+    "db:setup": "cd packages/database && pnpm run db:push && pnpm run db:seed",
+    "docker:up": "docker compose up -d postgres redis agents dashboard",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f agents dashboard",
+    "generate": "node generators/openai-content-pipeline.js",
+    "generate:sitemap": "cd apps/agents && pnpm tsx -e \"const {MaintenanceAgent}=require('./src/agents/maintenance');new MaintenanceAgent().execute({id:'cli',type:'GENERATE_SITEMAP',data:{baseUrl:'https://darkforest.sagaciasoft.com'},priority:1,retries:0,maxRetries:1}).then(r=>console.log(JSON.stringify(r,null,2)))\""
   },
   "devDependencies": {
     "turbo": "^1.10.16",

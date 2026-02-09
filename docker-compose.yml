@@ -55,27 +55,32 @@ services:
       - /app/node_modules
     restart: unless-stopped
 
-  # Agents Service  
+  # Agents Service (primary API)
   agents:
     build:
       context: .
       dockerfile: apps/agents/Dockerfile
+    ports:
+      - "8916:8916"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
+      - PORT=8916
+      - ALWAYS_ON=true
+      - TRIGGER_MODE=periodic
+      - PERIODIC_INTERVAL_MS=3600000
       - DATABASE_URL=postgresql://darkforest:${DATABASE_PASSWORD:-darkforest123}@postgres:5432/darkforest
       - REDIS_URL=redis://redis:6379
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - AGENTS_API_KEY=${AGENTS_API_KEY:-}
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-      orchestrator:
-        condition: service_started
     volumes:
-      - ./apps/agents:/app
-      - /app/node_modules
+      - ./config:/app/config:ro
+      - ./output:/app/output
+      - ./deploy:/app/deploy
     restart: unless-stopped
 
   # Dashboard
@@ -86,15 +91,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
-      - ORCHESTRATOR_URL=http://orchestrator:3001
-      - DATABASE_URL=postgresql://darkforest:${DATABASE_PASSWORD:-darkforest123}@postgres:5432/darkforest
+      - NODE_ENV=production
+      - NEXT_PUBLIC_AGENTS_URL=http://agents:8916
     depends_on:
-      - orchestrator
-    volumes:
-      - ./apps/dashboard:/app
-      - /app/node_modules
-      - /app/.next
+      - agents
     restart: unless-stopped
 
   # N8N Workflow Automation

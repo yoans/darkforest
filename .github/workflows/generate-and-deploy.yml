@@ -154,6 +154,24 @@ jobs:
           find deploy/ -type f | head -30 >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
       
+      - name: 🗺️ Generate Sitemap & RSS feeds
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          cd apps/agents
+          # Generate sitemap.xml in deploy/
+          npx tsx -e "
+            const { MaintenanceAgent } = require('./src/agents/maintenance');
+            const m = new MaintenanceAgent();
+            m.execute({ id:'ci-sitemap', type:'GENERATE_SITEMAP', data:{ baseUrl:'https://darkforest.sagaciasoft.com' }, priority:1, retries:0, maxRetries:1 })
+             .then(r => { console.log('Sitemap:', r.data?.urlCount, 'URLs'); })
+             .then(() => m.execute({ id:'ci-rss', type:'GENERATE_RSS', data:{ baseUrl:'https://darkforest.sagaciasoft.com' }, priority:1, retries:0, maxRetries:1 }))
+             .then(r => { console.log('RSS:', r.data?.totalFeeds, 'feeds'); })
+             .then(() => m.execute({ id:'ci-robots', type:'GENERATE_ROBOTS_TXT', data:{ baseUrl:'https://darkforest.sagaciasoft.com' }, priority:1, retries:0, maxRetries:1 }))
+             .then(r => { console.log('robots.txt generated'); });
+          "
+          cd ../..
+          echo "✅ SEO assets generated" >> $GITHUB_STEP_SUMMARY
+      
       - name: 📤 Deploy to GitHub Pages
         if: ${{ github.event.inputs.dry_run != 'true' }}
         uses: peaceiris/actions-gh-pages@v3

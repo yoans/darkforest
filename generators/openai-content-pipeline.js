@@ -152,7 +152,8 @@ Format: Return only the markdown content, starting with the title as # heading.`
         model: 'gpt-4',
         temperature: 0.7,
         maxTokens: 500,
-        systemPrompt: 'You are an SEO expert.',
+        jsonMode: true,
+        systemPrompt: 'You are an SEO expert. Always respond with valid JSON.',
         userPrompt: `Generate SEO metadata for this article:
 Title: ${title}
 Content preview: ${body}
@@ -184,17 +185,15 @@ Format as JSON:
   }
 
   /**
-   * Call OpenAI API
+   * Call OpenAI API with retries and exponential backoff
    */
-  async callOpenAI({ model, temperature, maxTokens, systemPrompt, userPrompt }) {
-    try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify({
+  async callOpenAI({ model, temperature, maxTokens, systemPrompt, userPrompt, jsonMode = false }) {
+    const maxRetries = 3;
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const body = {
           model,
           temperature,
           max_tokens: maxTokens,
@@ -202,20 +201,54 @@ Format as JSON:
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt }
           ]
-        })
-      });
+        };
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(`OpenAI API error: ${error.error?.message || response.statusText}`);
+        if (jsonMode) {
+          body.response_format = { type: 'json_object' };
+        }
+
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.apiKey}`
+          },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(120000) // 2 minute timeout
+        });
+
+        if (response.status === 429) {
+          const retryAfter = parseInt(response.headers.get('retry-after') || '5');
+          const delay = retryAfter * 1000 + Math.random() * 1000;
+          console.warn(`⚠️ Rate limited (attempt ${attempt}/${maxRetries}), waiting ${Math.round(delay/1000)}s...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+
+        if (response.status >= 500) {
+          throw new Error(`OpenAI server error: ${response.status}`);
+        }
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(`OpenAI API error: ${error.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+      } catch (error) {
+        lastError = error;
+        if (attempt < maxRetries) {
+          const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+          console.warn(`⚠️ OpenAI call failed (attempt ${attempt}/${maxRetries}): ${error.message}`);
+          console.warn(`   Retrying in ${Math.round(delay/1000)}s...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
       }
-
-      const data = await response.json();
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error('❌ OpenAI API call failed:', error.message);
-      throw error;
     }
+    
+    console.error(`❌ OpenAI API call failed after ${maxRetries} attempts:`, lastError.message);
+    throw lastError;
   }
 
   /**

@@ -1,17 +1,17 @@
 import { Agent, AgentTask, AgentResult } from '../types/base';
-import OpenAI from 'openai';
+import { RobustOpenAI } from '../utils/openai';
 
 export class ContentAgent extends Agent {
   id = 'content-001';
   name = 'Content Generation Agent';
   type = 'CONTENT';
-  version = '1.0.0';
+  version = '2.0.0';
 
-  private openai: OpenAI;
+  private ai: RobustOpenAI;
 
   constructor(apiKey: string) {
     super();
-    this.openai = new OpenAI({ apiKey });
+    this.ai = new RobustOpenAI(apiKey);
   }
 
   async execute(task: AgentTask): Promise<AgentResult> {
@@ -89,58 +89,53 @@ export class ContentAgent extends Agent {
     }
     `;
 
-    const response = await this.openai.chat.completions.create({
+    const response = await this.ai.callJSON<{
+      title: string;
+      content: string;
+      excerpt: string;
+      metaDescription: string;
+      headings: string[];
+      internalLinks: string[];
+      wordCount: number;
+      readabilityScore: number;
+    }>({
       model: 'gpt-4',
-      messages: [
-        {
-          role: 'system', 
-          content: 'You are an expert content writer and SEO specialist. Create high-quality, engaging articles that rank well in search engines while providing genuine value to readers.'
-        },
-        { role: 'user', content: prompt }
-      ],
+      systemPrompt: 'You are an expert content writer and SEO specialist. Create high-quality, engaging articles that rank well in search engines while providing genuine value to readers.',
+      userPrompt: prompt,
       temperature: 0.7,
-      max_tokens: 4000,
+      maxTokens: 4000,
+      jsonMode: true,
+      retries: 3,
     });
 
-    const content = response.choices[0]?.message?.content;
-    if (!content) {
-      return this.createErrorResult('No response from OpenAI');
+    const article = response;
+      
+    // Quality checks
+    const actualWordCount = article.content?.split(' ').length || 0;
+    const meetsWordCount = actualWordCount >= (wordCount * 0.8); // Allow 20% variance
+    
+    if (!meetsWordCount) {
+      return this.createErrorResult(
+        `Article too short: ${actualWordCount} words (minimum: ${wordCount * 0.8})`
+      );
     }
 
-    try {
-      const article = JSON.parse(content);
-      
-      // Quality checks
-      const actualWordCount = article.content?.split(' ').length || 0;
-      const meetsWordCount = actualWordCount >= (wordCount * 0.8); // Allow 20% variance
-      
-      if (!meetsWordCount) {
-        return this.createErrorResult(
-          `Article too short: ${actualWordCount} words (minimum: ${wordCount * 0.8})`
-        );
-      }
-
-      // Check for required elements
-      if (!article.title || !article.content || !article.metaDescription) {
-        return this.createErrorResult('Article missing required elements');
-      }
-
-      // This content requires human approval for quality
-      const requiresApproval = await this.requiresHumanApproval('content', article);
-
-      return this.createSuccessResult({
-        article,
-        metadata: {
-          model: 'gpt-4',
-          tokensUsed: response.usage?.total_tokens,
-          actualWordCount,
-          qualityScore: this.calculateQualityScore(article),
-        }
-      }, requiresApproval);
-
-    } catch (parseError) {
-      return this.createErrorResult(`Failed to parse article: ${parseError}`);
+    // Check for required elements
+    if (!article.title || !article.content || !article.metaDescription) {
+      return this.createErrorResult('Article missing required elements');
     }
+
+    // This content requires human approval for quality
+    const requiresApproval = await this.requiresHumanApproval('content', article as any);
+
+    return this.createSuccessResult({
+      article,
+      metadata: {
+        model: 'gpt-4',
+        actualWordCount,
+        qualityScore: this.calculateQualityScore(article),
+      }
+    }, requiresApproval);
   }
 
   private async optimizeContent(task: AgentTask): Promise<AgentResult> {
@@ -171,14 +166,15 @@ export class ContentAgent extends Agent {
     Format as JSON with original and optimized versions.
     `;
 
-    const response = await this.openai.chat.completions.create({
+    const optimization = await this.ai.callJSON({
       model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+      systemPrompt: 'You are an SEO content optimization expert.',
+      userPrompt: prompt,
       temperature: 0.3,
-      max_tokens: 3000,
+      maxTokens: 3000,
+      jsonMode: true,
+      retries: 3,
     });
-
-    const optimization = JSON.parse(response.choices[0]?.message?.content || '{}');
     
     return this.createSuccessResult({
       optimization,
@@ -201,14 +197,15 @@ export class ContentAgent extends Agent {
     Return as JSON array of title objects with SEO analysis.
     `;
 
-    const response = await this.openai.chat.completions.create({
+    const titles = await this.ai.callJSON({
       model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+      systemPrompt: 'You are a headline writing expert specializing in SEO.',
+      userPrompt: prompt,
       temperature: 0.8,
-      max_tokens: 1000,
+      maxTokens: 1000,
+      jsonMode: true,
+      retries: 3,
     });
-
-    const titles = JSON.parse(response.choices[0]?.message?.content || '[]');
     
     return this.createSuccessResult({ titles });
   }

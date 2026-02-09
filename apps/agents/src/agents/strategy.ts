@@ -1,17 +1,17 @@
 import { Agent, AgentTask, AgentResult } from '../types/base';
-import OpenAI from 'openai';
+import { RobustOpenAI } from '../utils/openai';
 
 export class StrategyAgent extends Agent {
   id = 'strategy-001';
   name = 'Strategy Planning Agent';
   type = 'STRATEGY';
-  version = '1.0.0';
+  version = '2.0.0';
 
-  private openai: OpenAI;
+  private ai: RobustOpenAI;
 
   constructor(apiKey: string) {
     super();
-    this.openai = new OpenAI({ apiKey });
+    this.ai = new RobustOpenAI(apiKey);
   }
 
   async execute(task: AgentTask): Promise<AgentResult> {
@@ -80,36 +80,30 @@ export class StrategyAgent extends Agent {
     }
     `;
 
-    const response = await this.openai.chat.completions.create({
+    const strategy = await this.ai.callJSON<{
+      topics: Array<{ title: string; keyword: string; type: string; priority: number; estimatedWords: number; difficulty: string }>;
+      contentMix: Record<string, number>;
+    }>({
       model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+      systemPrompt: 'You are an expert content strategist for digital publishing.',
+      userPrompt: prompt,
       temperature: 0.7,
-      max_tokens: 2000,
+      maxTokens: 2000,
+      jsonMode: true,
+      retries: 3,
     });
 
-    const content = response.choices[0]?.message?.content;
-    if (!content) {
-      return this.createErrorResult('No response from OpenAI');
+    // Validate strategy structure
+    if (!strategy.topics || !Array.isArray(strategy.topics)) {
+      return this.createErrorResult('Invalid strategy format');
     }
 
-    try {
-      const strategy = JSON.parse(content);
-      
-      // Validate strategy structure
-      if (!strategy.topics || !Array.isArray(strategy.topics)) {
-        return this.createErrorResult('Invalid strategy format');
+    return this.createSuccessResult({
+      strategy,
+      metadata: {
+        model: 'gpt-4',
       }
-
-      return this.createSuccessResult({
-        strategy,
-        metadata: {
-          model: 'gpt-4',
-          tokensUsed: response.usage?.total_tokens,
-        }
-      });
-    } catch (parseError) {
-      return this.createErrorResult(`Failed to parse strategy: ${parseError}`);
-    }
+    });
   }
 
   private async conductKeywordResearch(task: AgentTask): Promise<AgentResult> {
@@ -130,15 +124,15 @@ export class StrategyAgent extends Agent {
     Format as JSON.
     `;
 
-    const response = await this.openai.chat.completions.create({
+    const keywords = await this.ai.callJSON({
       model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+      systemPrompt: 'You are an SEO keyword research specialist.',
+      userPrompt: prompt,
       temperature: 0.3,
-      max_tokens: 1000,
+      maxTokens: 1000,
+      jsonMode: true,
+      retries: 3,
     });
-
-    // Process and return keywords
-    const keywords = JSON.parse(response.choices[0]?.message?.content || '{}');
     
     return this.createSuccessResult({
       keywords,

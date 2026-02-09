@@ -6,14 +6,20 @@ import { EventEmitter } from 'events';
 import { StrategyAgent } from './agents/strategy';
 import { ContentAgent } from './agents/content';
 import { PublishingAgent } from './agents/publishing';
+import { ResearchAgent } from './agents/research';
+import { SEOAgent } from './agents/seo';
+import { AnalyticsAgent } from './agents/analytics';
+import { MonetizationAgent } from './agents/monetization';
+import { MaintenanceAgent } from './agents/maintenance';
 import { Agent, AgentTask, AgentResult } from './types/base';
+import { apiKeyAuth, rateLimiter, requestLogger } from './middleware/security';
 
 // Simple logger for now
 const logger = {
   info: (msg: string, data?: any) => console.log(`[INFO] ${msg}`, data || ''),
   error: (msg: string, error?: any) => console.error(`[ERROR] ${msg}`, error || ''),
   warn: (msg: string, data?: any) => console.warn(`[WARN] ${msg}`, data || ''),
-  debug: (msg: string, data?: any) => console.log(`[DEBUG] ${msg}`, data || '')
+  debug: (msg: string, data?: any) => console.log(`[DEBUG] ${msg}`, data || ''),
 };
 
 // Configuration for always-on operation
@@ -49,11 +55,16 @@ class AlwaysOnOrchestrator extends EventEmitter {
 
   private initializeAgents() {
     if (this.agentConfig.apiKey) {
-      // Initialize real AI-powered agents
+      // Initialize all 8 real AI-powered agents
       this.agents.set('strategy', new StrategyAgent(this.agentConfig.apiKey));
       this.agents.set('content', new ContentAgent(this.agentConfig.apiKey));
       this.agents.set('publishing', new PublishingAgent());
-      logger.info('🤖 Initialized real AI agents with OpenAI integration');
+      this.agents.set('research', new ResearchAgent(this.agentConfig.apiKey));
+      this.agents.set('seo', new SEOAgent(this.agentConfig.apiKey));
+      this.agents.set('analytics', new AnalyticsAgent(this.agentConfig.apiKey));
+      this.agents.set('monetization', new MonetizationAgent(this.agentConfig.apiKey));
+      this.agents.set('maintenance', new MaintenanceAgent());
+      logger.info(`🤖 Initialized ${this.agents.size} real AI agents with OpenAI integration`);
     } else {
       // Fallback to placeholder agents for development
       logger.warn('⚠️ No API key provided, using placeholder agents');
@@ -290,21 +301,51 @@ class AlwaysOnOrchestrator extends EventEmitter {
 
   private getAgentIdForTask(taskType: string): string {
     const typeMap: Record<string, string> = {
+      // Strategy
       'STRATEGY_PLANNING': 'strategy',
       'KEYWORD_RESEARCH': 'strategy',
       'COMPETITOR_ANALYSIS': 'strategy',
+      // Content
       'CONTENT_GENERATION': 'content',
       'CONTENT_OPTIMIZATION': 'content',
       'TITLE_GENERATION': 'content',
+      // Publishing
       'PUBLISH_POST': 'publishing',
       'SCHEDULE_POST': 'publishing',
       'UPDATE_POST': 'publishing',
       'GENERATE_SOCIAL_POSTS': 'publishing',
-      'ANALYTICS_COLLECTION': 'analytics',
-      'SEO_OPTIMIZATION': 'seo',
-      'MONETIZATION_OPTIMIZATION': 'monetization',
+      // Research
       'RESEARCH': 'research',
-      'MAINTENANCE': 'maintenance'
+      'TRENDING_TOPICS': 'research',
+      'FACT_CHECK': 'research',
+      'COMPETITOR_RESEARCH': 'research',
+      'SOURCE_GATHERING': 'research',
+      // SEO
+      'SEO_OPTIMIZATION': 'seo',
+      'KEYWORD_ANALYSIS': 'seo',
+      'PAGE_AUDIT': 'seo',
+      'META_GENERATION': 'seo',
+      'INTERNAL_LINKING': 'seo',
+      // Analytics
+      'ANALYTICS_COLLECTION': 'analytics',
+      'COLLECT_METRICS': 'analytics',
+      'PERFORMANCE_REPORT': 'analytics',
+      'CONTENT_PERFORMANCE': 'analytics',
+      'GROWTH_ANALYSIS': 'analytics',
+      // Monetization
+      'MONETIZATION_OPTIMIZATION': 'monetization',
+      'AD_PLACEMENT': 'monetization',
+      'AFFILIATE_PRODUCTS': 'monetization',
+      'REVENUE_ANALYSIS': 'monetization',
+      'CTA_OPTIMIZATION': 'monetization',
+      // Maintenance
+      'MAINTENANCE': 'maintenance',
+      'HEALTH_CHECK': 'maintenance',
+      'GENERATE_SITEMAP': 'maintenance',
+      'GENERATE_RSS': 'maintenance',
+      'BROKEN_LINK_CHECK': 'maintenance',
+      'CLEANUP': 'maintenance',
+      'GENERATE_ROBOTS_TXT': 'maintenance',
     };
     return typeMap[taskType] || 'strategy';
   }
@@ -343,10 +384,16 @@ async function startAgents() {
   const app = express();
   const server = createServer(app);
 
-  // Middleware
+  // Middleware — security, logging, rate limiting
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
+  app.use(requestLogger);
+  app.use(rateLimiter({ windowMs: 60_000, maxRequests: 120 }));
+
+  // Protect mutating endpoints with API key auth
+  app.use('/api/orchestrator', apiKeyAuth);
+  app.use('/api/agents/:agentId/execute', apiKeyAuth);
 
   // Health check
   app.get('/health', (req, res) => {
